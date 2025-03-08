@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
+import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/home/widgets/home_button.dart';
 
 class HomeView extends StatelessWidget {
@@ -63,6 +65,7 @@ class HomeView extends StatelessWidget {
                           label: 'создать',
                           onTap: () {
                             print('я гей');
+                            context.go(mainRoute + createRoute);
                           },
                         ),
                       ],

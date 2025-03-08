@@ -48,6 +48,7 @@ class _HomeButtonState extends State<HomeButton> {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Row(
+                textBaseline: TextBaseline.alphabetic,
                 spacing: 25.0,
                 children: <Widget>[
                   AspectRatio(
