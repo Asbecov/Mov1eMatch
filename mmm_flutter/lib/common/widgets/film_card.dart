@@ -1,12 +1,9 @@
-import 'dart:math';
+import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
 
-class FilmCard extends StatelessWidget {
+class FilmCard extends StatefulWidget {
   const FilmCard({
     super.key,
     required this.image,
@@ -17,173 +14,111 @@ class FilmCard extends StatelessWidget {
   final void Function(Key? key) onDelete;
 
   @override
-  Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
-    final ColorScheme colorScheme = themeData.colorScheme;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: colorScheme.onSurface,
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      padding: EdgeInsets.all(10.0),
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final double buttonSize = constraints.maxHeight / 5;
-
-          return Stack(
-            alignment: Alignment.bottomRight,
-            children: [
-              image,
-              SizedBox.square(
-                dimension: buttonSize,
-                child: FocusableButton(
-                  onTap: () => onDelete(super.key),
-                  icon: Icons.delete_forever_sharp,
-                ),
-              )
-            ],
-          );
-        },
-      ),
-    );
-  }
+  State<FilmCard> createState() => _FilmCardState();
 }
 
-class FocusableButton extends StatefulWidget {
-  const FocusableButton({
-    super.key,
-    required this.onTap,
-    required this.icon,
-  });
+class _FilmCardState extends State<FilmCard> {
+  late final FocusNode _focusNode;
 
-  final IconData icon;
-  final void Function() onTap;
+  late ThemeData _theme;
+  late ColorScheme _colorScheme;
 
-  @override
-  State<FocusableButton> createState() => _FocusableButtonState();
-}
+  bool _selected = false;
 
-class _FocusableButtonState extends State<FocusableButton> {
-  late final FocusNode focusNode;
+  bool get _shouldShowCross => _focusNode.hasFocus || _selected;
 
   @override
   void initState() {
     super.initState();
 
-    focusNode = FocusNode(
-      descendantsAreFocusable: false,
-      descendantsAreTraversable: false,
-    );
+    _focusNode = FocusNode();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _theme = Theme.of(context);
+    _colorScheme = _theme.colorScheme;
   }
 
   @override
   void dispose() {
-    focusNode.dispose();
+    _focusNode.dispose();
 
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) => Focus(
-        focusNode: focusNode,
-        child: FocusableButtonRenderWidget(
-          focused: focusNode.hasFocus,
-          onTap: widget.onTap,
-          child: Icon(widget.icon),
-        ),
-      );
-}
+  void _handleFocusChange(bool isFocused) => setState(() {});
 
-class FocusableButtonRenderWidget extends SingleChildRenderObjectWidget {
-  const FocusableButtonRenderWidget({
-    super.key,
-    required this.focused,
-    required this.onTap,
-    required super.child,
-  });
+  void _handleEnter(_) => setState(() => _selected = !_selected);
 
-  final bool focused;
-  final void Function() onTap;
+  void _handleExit(_) => setState(() => _selected = !_selected);
 
-  @override
-  RenderObject createRenderObject(BuildContext context) =>
-      FocusableButtonRenderObject(
-        focused: focused,
-        onTap: onTap,
-      );
-
-  @override
-  void updateRenderObject(
-      BuildContext context, covariant RenderObject renderObject) {
-    if (renderObject is FocusableButtonRenderObject) {
-      renderObject.focused = focused;
-    } else {
-      super.updateRenderObject(context, renderObject);
+  KeyEventResult _handleKeyEvent(FocusNode node, KeyEvent event) {
+    if (event.logicalKey.keyLabel == 'Enter') {
+      _handleTap();
+      return KeyEventResult.handled;
     }
+    return KeyEventResult.ignored;
   }
-}
 
-class FocusableButtonRenderObject extends RenderBox
-    with RenderObjectWithChildMixin {
-  FocusableButtonRenderObject({
-    required bool focused,
-    required this.onTap,
-  }) : _focused = focused;
-
-  final void Function() onTap;
-  bool _focused;
-
-  set focused(bool focused) {
-    _focused = focused;
-    markNeedsPaint();
-    markNeedsSemanticsUpdate();
-  }
+  void _handleTap() => widget.onDelete(widget.key);
 
   @override
-  void performLayout() {
-    final double width = constraints.maxWidth;
-    final double height = constraints.maxHeight;
-
-    size = constraints.constrain(Size(width, height));
-  }
-
-  @override
-  bool hitTest(BoxHitTestResult result, {required Offset position}) {
-    if (!(Offset.zero & size).contains(position)) return false;
-
-    result.add(BoxHitTestEntry(this, position));
-    return true;
-  }
-
-  @override
-  void handleEvent(
-      PointerEvent event, covariant HitTestEntry<HitTestTarget> entry) {
-    if (event is PointerDownEvent) onTap();
-  }
-
-  @override
-  void paint(PaintingContext context, Offset offset) {
-    final Rect rect = offset & size;
-
-    final Path path = Path()
-      ..moveTo(0, rect.bottom)
-      ..arcTo(offset & (size * 2), pi, pi / 2, false)
-      ..lineTo(rect.right, rect.bottom)
-      ..lineTo(0, rect.bottom)
-      ..close();
-
-    final Paint paint = Paint()
-      ..style = PaintingStyle.fill
-      ..color = Colors.red;
-    final Paint focusPaint = Paint()
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3
-      ..color = Colors.white;
-
-    context.canvas.drawPath(path, paint);
-    if (_focused) context.canvas.drawPath(path, focusPaint);
-
-    child?.paint(context, offset);
+  Widget build(BuildContext context) {
+    return Focus(
+      focusNode: _focusNode,
+      onFocusChange: _handleFocusChange,
+      onKeyEvent: _handleKeyEvent,
+      child: MouseRegion(
+        onEnter: _handleEnter,
+        onExit: _handleExit,
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: _handleTap,
+          child: Container(
+            decoration: BoxDecoration(
+              color: _colorScheme.onSurface,
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: Border.all(
+                width: 3.0,
+                color: _focusNode.hasFocus
+                    ? _colorScheme.primary
+                    : Colors.transparent,
+              ),
+            ),
+            padding: EdgeInsets.all(10.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: LayoutBuilder(builder: (context, constraints) {
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    ImageFiltered(
+                      enabled: _shouldShowCross,
+                      imageFilter: ImageFilter.compose(
+                        outer: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                        inner: ColorFilter.mode(
+                          _colorScheme.error,
+                          BlendMode.color,
+                        ),
+                      ),
+                      child: widget.image,
+                    ),
+                    if (_shouldShowCross)
+                      Icon(
+                        Icons.close,
+                        color: _colorScheme.primary,
+                        // size: constraints.maxWidth.floorToDouble() / 3,
+                      ),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
