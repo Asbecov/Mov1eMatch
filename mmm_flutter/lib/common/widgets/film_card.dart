@@ -8,9 +8,11 @@ class FilmCard extends StatefulWidget {
     super.key,
     required this.image,
     required this.onDelete,
+    required this.label,
   });
 
   final Image image;
+  final String label;
   final void Function(Key? key) onDelete;
 
   @override
@@ -79,42 +81,66 @@ class _FilmCardState extends State<FilmCard> {
           onTap: _handleTap,
           child: Container(
             decoration: BoxDecoration(
-              color: _colorScheme.onSurface,
+              color: _colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
-                width: 3.0,
+                width: 2.0,
                 color: _focusNode.hasFocus
-                    ? _colorScheme.primary
+                    ? _colorScheme.outline
                     : Colors.transparent,
               ),
             ),
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(5.0),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: LayoutBuilder(builder: (context, constraints) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    ImageFiltered(
-                      enabled: _shouldShowCross,
-                      imageFilter: ImageFilter.compose(
-                        outer: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                        inner: ColorFilter.mode(
-                          _colorScheme.error,
-                          BlendMode.color,
+              borderRadius: BorderRadius.circular(borderRadius - 5),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  ImageFiltered(
+                    enabled: _shouldShowCross,
+                    imageFilter: ImageFilter.compose(
+                      outer: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                      inner: ColorFilter.mode(
+                        _colorScheme.error,
+                        BlendMode.color,
+                      ),
+                    ),
+                    child: widget.image,
+                  ),
+                  if (_shouldShowCross) Icon(Icons.close),
+                  if (!_shouldShowCross)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: <Color>[
+                              Colors.transparent,
+                              Colors.black,
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            borderRadius: BorderRadius.circular(borderRadius),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 5.0,
+                            horizontal: 10.0,
+                          ),
+                          child: Text(widget.label),
                         ),
                       ),
-                      child: widget.image,
-                    ),
-                    if (_shouldShowCross)
-                      Icon(
-                        Icons.close,
-                        color: _colorScheme.primary,
-                        // size: constraints.maxWidth.floorToDouble() / 3,
-                      ),
-                  ],
-                );
-              }),
+                    )
+                ],
+              ),
             ),
           ),
         ),

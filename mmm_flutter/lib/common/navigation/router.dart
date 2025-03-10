@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/create/views/create_view.dart';
-import 'package:mmm/features/home/views/home_view.dart';
 
 final GoRouter route = GoRouter(
-  routes: <GoRoute>[
-    GoRoute(
-      path: mainRoute,
-      builder: (context, state) => const HomeView(),
+  routes: <RouteBase>[
+    ShellRoute(
+      builder: (context, state, child) => HomeRoute(state: state, child: child),
       routes: <GoRoute>[
         GoRoute(
-          path: createRoute,
+          path: createRoute, // Ensure this is NOT '/' if inside a ShellRoute
           builder: (context, state) => const CreateView(),
         ),
         GoRoute(
@@ -21,13 +18,34 @@ final GoRouter route = GoRouter(
       ],
     ),
     GoRoute(
-        path: vottingRoute,
-        builder: (context, state) => const Placeholder(),
-        routes: <GoRoute>[
-          GoRoute(
-            path: resultsRoute,
-            builder: (context, state) => const Placeholder(),
-          ),
-        ]),
+      path: vottingRoute,
+      builder: (context, state) => const Placeholder(),
+      routes: <GoRoute>[
+        GoRoute(
+          path: resultsRoute,
+          builder: (context, state) => const Placeholder(),
+        ),
+      ],
+    ),
   ],
 );
+
+const String createRoute = '/';
+const String collectionsRoute = '/collections';
+
+const String vottingRoute = '/voting';
+const String resultsRoute = '/results';
+
+class HomeRoute extends StatelessWidget {
+  const HomeRoute({
+    super.key,
+    required this.state,
+    required this.child,
+  });
+
+  final GoRouterState state;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => child;
+}

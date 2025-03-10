@@ -1,29 +1,29 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mmm/common/constants/app_constants.dart';
 
-class HomeButton extends StatefulWidget {
-  const HomeButton({
+class SelectableButton extends StatefulWidget {
+  const SelectableButton({
     super.key,
+    required this.selected,
     required this.icon,
     required this.label,
     required this.onTap,
   });
 
+  final bool selected;
   final IconData icon;
   final String label;
   final void Function() onTap;
 
   @override
-  State<HomeButton> createState() => _HomeButtonState();
+  State<SelectableButton> createState() => _HomeButtonState();
 }
 
-class _HomeButtonState extends State<HomeButton> {
-  bool focused = false;
+class _HomeButtonState extends State<SelectableButton> {
+  bool _focused = false;
 
   void _handleFocusChange(bool isFocused) => setState(() {
-        focused = isFocused;
+        _focused = isFocused;
       });
 
   @override
@@ -34,52 +34,28 @@ class _HomeButtonState extends State<HomeButton> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius),
         border: Border.all(
-          color: focused ? themeData.colorScheme.primary : Colors.transparent,
-          width: 3.0,
+          color: _focused ? themeData.colorScheme.outline : Colors.transparent,
+          width: rimSize,
         ),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(borderRadius),
         child: Material(
-          color: themeData.colorScheme.onSurface,
+          color: widget.selected
+              ? themeData.colorScheme.primaryContainer
+              : themeData.colorScheme.surfaceContainer,
           child: InkWell(
+            autofocus: true,
             onFocusChange: _handleFocusChange,
             onTap: widget.onTap,
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
               child: Row(
-                textBaseline: TextBaseline.alphabetic,
-                spacing: 25.0,
+                spacing: 10,
                 children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: 1.0,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: themeData.colorScheme.primary,
-                        borderRadius: BorderRadius.circular(borderRadius),
-                      ),
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.all(10.0),
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          final double size = max(
-                            constraints.maxHeight,
-                            constraints.minWidth,
-                          );
-
-                          return Icon(
-                            widget.icon,
-                            color: themeData.colorScheme.onPrimary,
-                            size: size,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Text(
-                    widget.label,
-                    style: themeData.textTheme.labelMedium,
-                  ),
+                  Icon(widget.icon),
+                  Text(widget.label),
                 ],
               ),
             ),
