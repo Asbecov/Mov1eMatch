@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/create/views/create_view.dart';
+import 'package:mmm/features/home/views/home_view.dart';
 
 final GoRouter route = GoRouter(
+  initialLocation: createRoute,
   routes: <RouteBase>[
     ShellRoute(
       builder: (context, state, child) => HomeRoute(state: state, child: child),
@@ -29,23 +32,3 @@ final GoRouter route = GoRouter(
     ),
   ],
 );
-
-const String createRoute = '/';
-const String collectionsRoute = '/collections';
-
-const String vottingRoute = '/voting';
-const String resultsRoute = '/results';
-
-class HomeRoute extends StatelessWidget {
-  const HomeRoute({
-    super.key,
-    required this.state,
-    required this.child,
-  });
-
-  final GoRouterState state;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) => child;
-}
