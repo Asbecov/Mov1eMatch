@@ -84,7 +84,7 @@ class _FilmCardState extends State<FilmCard> {
               color: _colorScheme.surfaceContainer,
               borderRadius: BorderRadius.circular(borderRadius),
               border: Border.all(
-                width: 2.0,
+                width: rimSize,
                 color: _focusNode.hasFocus
                     ? _colorScheme.outline
                     : Colors.transparent,

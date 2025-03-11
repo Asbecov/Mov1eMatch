@@ -13,14 +13,11 @@ class CreateView extends StatefulWidget {
 
 class _CreateViewState extends State<CreateView> {
   late int _crossAxisCount;
-  bool _focused = false;
-  late double _bottomBarHeight;
+  late TextEditingController _controller;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
-    _bottomBarHeight = MediaQuery.sizeOf(context).height / 6;
 
     switch (MediaQuery.sizeOf(context).aspectRatio) {
       case <= 4 / 3 && > 9 / 16:
@@ -35,33 +32,15 @@ class _CreateViewState extends State<CreateView> {
     }
   }
 
-  late TextEditingController _controller;
-  late FocusNode _focusNode;
-
   @override
   void initState() {
     super.initState();
     _controller = TextEditingController();
-    _focusNode = FocusNode();
-
-    // Пример: Слушаем изменения фокуса
-    _focusNode.addListener(() {
-      if (_focusNode.hasFocus) {
-        setState(() {
-          _focused = !_focused;
-        });
-      } else {
-        setState(() {
-          _focused = !_focused;
-        });
-      }
-    });
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _focusNode.dispose();
     super.dispose();
   }
 
@@ -99,7 +78,6 @@ class _CreateViewState extends State<CreateView> {
         body: Column(
           children: <Widget>[
             Expanded(
-              flex: 8,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: _crossAxisCount,
@@ -116,121 +94,58 @@ class _CreateViewState extends State<CreateView> {
                 itemCount: 30,
               ),
             ),
-            Expanded(
-              flex: 1,
-              child: Container(
-                height: _bottomBarHeight,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(borderRadius)),
-                ),
-                padding: EdgeInsets.all(10),
-                child: Row(
-                  spacing: 20,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () => _focusNode.requestFocus(),
-                        child: MouseRegion(
-                          cursor: SystemMouseCursors.text,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: double.infinity,
-                            padding: EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context).colorScheme.surface,
-                              border: Border.all(
-                                color: _focused
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                width: 3,
-                              ),
-                            ),
-                            child: Stack(
-                              children: [
-                                EditableText(
-                                  controller: _controller,
-                                  focusNode: _focusNode,
-                                  strutStyle: StrutStyle(
-                                    fontSize: 16,
-                                    height: 0,
-                                  ),
-                                  style: TextStyle(
-                                      fontSize: 30, color: Colors.white),
-                                  cursorColor: Colors.blue,
-                                  backgroundCursorColor: Colors.grey,
-                                  keyboardType: TextInputType.text,
-                                  onChanged: (text) =>
-                                      print("Текст изменён: $text"),
-                                  onSubmitted: (text) =>
-                                      print("Текст отправлен: $text"),
-                                  textDirection: TextDirection.ltr,
-                                  autofocus: false,
-                                  obscureText: false,
-                                  maxLines: 1,
-                                  selectionControls:
-                                      MaterialTextSelectionControls(),
-                                ),
-                                if (_controller.text.isEmpty &&
-                                    !_focusNode.hasFocus)
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10), // Отступ слева
-
-                                    child: Text(
-                                      "найдите фильмы",
-                                      style: TextStyle(
-                                        fontSize: 30,
-                                        decoration: TextDecoration.none,
-                                        color: Colors.white.withOpacity(0.5),
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ),
+            Container(
+              height: kBottomNavigationBarHeight,
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHigh,
+                borderRadius:
+                    BorderRadius.vertical(top: Radius.circular(borderRadius)),
+              ),
+              padding: EdgeInsets.all(10),
+              child: Row(
+                spacing: 10,
+                children: [
+                  Expanded(
+                    child: MovieMatcherTextField(
+                      hint: 'найдите фильмы',
+                      textEditingController: _controller,
+                    ),
+                  ),
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.search, size: 40),
+                      label: SizedBox(),
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size.square(36),
+                        backgroundColor: Color.fromARGB(255, 53, 53, 53),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.search, size: 40),
-                        label: SizedBox(),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size.square(36),
-                          backgroundColor: Color.fromARGB(255, 53, 53, 53),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
+                  ),
+                  AspectRatio(
+                    aspectRatio: 1,
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(Icons.search, size: 40),
+                      label: SizedBox(),
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size.square(56),
+                        backgroundColor: Color.fromARGB(255, 53, 53, 53),
+                        foregroundColor: Colors.white,
+                        padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                     ),
-                    AspectRatio(
-                      aspectRatio: 1,
-                      child: ElevatedButton.icon(
-                        onPressed: () {},
-                        icon: Icon(Icons.search, size: 40),
-                        label: SizedBox(),
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: Size.square(56),
-                          backgroundColor: Color.fromARGB(255, 53, 53, 53),
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.zero,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -238,16 +153,91 @@ class _CreateViewState extends State<CreateView> {
       );
 }
 
-class CustomTextField extends StatefulWidget {
-  const CustomTextField({super.key});
+class MovieMatcherTextField extends StatefulWidget {
+  const MovieMatcherTextField({
+    super.key,
+    required this.hint,
+    required this.textEditingController,
+  });
+
+  final String hint;
+  final TextEditingController textEditingController;
 
   @override
-  State<CustomTextField> createState() => _CustomTextFieldState();
+  State<MovieMatcherTextField> createState() => _MovieMatcherTextFieldState();
 }
 
-class _CustomTextFieldState extends State<CustomTextField> {
+class _MovieMatcherTextFieldState extends State<MovieMatcherTextField> {
+  late final FocusNode _focusNode;
+  late ColorScheme colorScheme;
+
   @override
-  Widget build(BuildContext context) {
-    return Container();
+  void initState() {
+    super.initState();
+
+    _focusNode = FocusNode()..addListener(_focusNodeListener);
   }
+
+  @override
+  void didChangeDependencies() {
+    colorScheme = Theme.of(context).colorScheme;
+
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+
+    super.dispose();
+  }
+
+  void _focusNodeListener() => setState(() {});
+
+  @override
+  Widget build(BuildContext context) => MouseRegion(
+        cursor: SystemMouseCursors.text,
+        child: GestureDetector(
+          onTap: () => _focusNode.requestFocus(),
+          child: Container(
+            height: double.infinity,
+            alignment: Alignment.centerLeft,
+            decoration: BoxDecoration(
+              color: colorScheme.surfaceContainerHighest,
+              border: Border.all(
+                width: rimSize,
+                color: _focusNode.hasFocus
+                    ? colorScheme.outline
+                    : Colors.transparent,
+              ),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+            child: Material(
+              color: colorScheme.surfaceContainerHighest,
+              borderRadius: BorderRadius.circular(borderRadius),
+              child: TextField(
+                scrollPadding: EdgeInsets.zero,
+                focusNode: _focusNode,
+                controller: widget.textEditingController,
+                decoration: InputDecoration(
+                  constraints: BoxConstraints.expand(),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  hintText: widget.hint,
+                  border: OutlineInputBorder(borderSide: BorderSide.none),
+                  errorBorder: OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  disabledBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  focusedErrorBorder:
+                      OutlineInputBorder(borderSide: BorderSide.none),
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
 }
