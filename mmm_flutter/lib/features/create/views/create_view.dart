@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
 import 'package:mmm/common/widgets/film_card.dart';
-import 'package:mmm/features/home/widgets/home_button.dart';
 
 class CreateView extends StatefulWidget {
   const CreateView({super.key});
@@ -45,111 +44,52 @@ class _CreateViewState extends State<CreateView> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          title: Center(
-            child: SizedBox(
-              height: kToolbarHeight,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  spacing: 20,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    SelectableButton(
-                      selected: false,
-                      icon: Icons.group_work,
-                      label: 'создать',
-                      onTap: () {},
-                    ),
-                    SelectableButton(
-                      selected: true,
-                      icon: Icons.auto_awesome,
-                      label: 'подборки',
-                      onTap: () {},
-                    ),
-                  ],
+  Widget build(BuildContext context) => Column(
+        children: [
+          Expanded(
+            child: CustomScrollView(
+              slivers: <Widget>[
+                SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _crossAxisCount,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 2 / 3,
+                  ),
+                  itemBuilder: (context, index) => FilmCard(
+                    key: ValueKey(index),
+                    image: Image.asset('assets/pine_trees.jpg'),
+                    label: 'assets/pine_trees.jpg $index',
+                    onDelete: (id) => context.pop(),
+                  ),
+                  itemCount: 30,
                 ),
-              ),
+              ],
             ),
           ),
-        ),
-        body: Column(
-          children: <Widget>[
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: _crossAxisCount,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 2 / 3,
-                ),
-                itemBuilder: (context, index) => FilmCard(
-                  key: ValueKey(index),
-                  image: Image.asset('assets/pine_trees.jpg'),
-                  label: 'assets/pine_trees.jpg $index',
-                  onDelete: (id) => context.pop(),
-                ),
-                itemCount: 30,
-              ),
+          Container(
+            height: kBottomNavigationBarHeight,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surfaceContainerHigh,
+              borderRadius:
+                  BorderRadius.vertical(top: Radius.circular(borderRadius)),
             ),
-            Container(
-              height: kBottomNavigationBarHeight,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHigh,
-                borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(borderRadius)),
-              ),
-              padding: EdgeInsets.all(10),
-              child: Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    child: MovieMatcherTextField(
-                      hint: 'найдите фильмы',
-                      textEditingController: _controller,
-                    ),
+            padding: EdgeInsets.all(10),
+            child: Row(
+              spacing: 10,
+              children: [
+                Expanded(
+                  child: MovieMatcherTextField(
+                    hint: 'найдите фильмы',
+                    textEditingController: _controller,
                   ),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.search, size: 40),
-                      label: SizedBox(),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size.square(36),
-                        backgroundColor: Color.fromARGB(255, 53, 53, 53),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                  AspectRatio(
-                    aspectRatio: 1,
-                    child: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: Icon(Icons.search, size: 40),
-                      label: SizedBox(),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size.square(56),
-                        backgroundColor: Color.fromARGB(255, 53, 53, 53),
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                BottomBarButton(icon: Icons.search_sharp, onTap: () {}),
+                BottomBarButton(icon: Icons.arrow_forward, onTap: () {}),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       );
 }
 
@@ -240,4 +180,59 @@ class _MovieMatcherTextFieldState extends State<MovieMatcherTextField> {
           ),
         ),
       );
+}
+
+class BottomBarButton extends StatefulWidget {
+  const BottomBarButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final void Function() onTap;
+
+  @override
+  State<BottomBarButton> createState() => _BottomBarButtonState();
+}
+
+class _BottomBarButtonState extends State<BottomBarButton> {
+  bool _focused = false;
+
+  void _handleFocusChange(bool isFocused) => setState(() {
+        _focused = isFocused;
+      });
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData themeData = Theme.of(context);
+
+    return AspectRatio(
+      aspectRatio: 1.0,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(borderRadius),
+          border: Border.all(
+            color:
+                _focused ? themeData.colorScheme.outline : Colors.transparent,
+            width: rimSize,
+          ),
+        ),
+        alignment: Alignment.center,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(borderRadius),
+          child: Material(
+            color: themeData.colorScheme.primaryContainer,
+            child: InkWell(
+              onFocusChange: _handleFocusChange,
+              onTap: widget.onTap,
+              child: Center(
+                child: Icon(widget.icon),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }

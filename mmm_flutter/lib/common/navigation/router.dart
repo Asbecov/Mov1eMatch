@@ -7,17 +7,24 @@ import 'package:mmm/features/home/views/home_view.dart';
 final GoRouter route = GoRouter(
   initialLocation: createRoute,
   routes: <RouteBase>[
-    ShellRoute(
-      builder: (context, state, child) => HomeRoute(state: state, child: child),
-      routes: <GoRoute>[
-        GoRoute(
-          path: createRoute, // Ensure this is NOT '/' if inside a ShellRoute
-          builder: (context, state) => const CreateView(),
-        ),
-        GoRoute(
-          path: collectionsRoute,
-          builder: (context, state) => const Placeholder(),
-        ),
+    StatefulShellRoute.indexedStack(
+      builder: (context, state, navigationShell) =>
+          HomeRoute(navigationShell: navigationShell),
+      branches: <StatefulShellBranch>[
+        StatefulShellBranch(routes: <RouteBase>[
+          GoRoute(
+            path: createRoute,
+            name: createName,
+            builder: (context, state) => const CreateView(),
+          ),
+        ]),
+        StatefulShellBranch(routes: <RouteBase>[
+          GoRoute(
+            path: collectionsRoute,
+            name: collectionsName,
+            builder: (context, state) => const Placeholder(),
+          ),
+        ]),
       ],
     ),
     GoRoute(

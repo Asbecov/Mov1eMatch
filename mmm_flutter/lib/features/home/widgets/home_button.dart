@@ -45,7 +45,6 @@ class _HomeButtonState extends State<SelectableButton> {
               ? themeData.colorScheme.primaryContainer
               : themeData.colorScheme.surfaceContainer,
           child: InkWell(
-            autofocus: true,
             onFocusChange: _handleFocusChange,
             onTap: widget.onTap,
             child: Padding(
