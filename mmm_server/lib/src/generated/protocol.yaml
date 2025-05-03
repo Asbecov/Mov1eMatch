@@ -1,0 +1,7 @@
+search:
+  - search:
+session:
+  - startVotingSession:
+  - closeVotingSession:
+  - submitVotes:
+  - connectToVotingSession:

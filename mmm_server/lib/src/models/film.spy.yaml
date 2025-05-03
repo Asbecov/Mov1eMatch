@@ -1,0 +1,6 @@
+class: Film
+fields:
+  art: String?
+  title: String
+  description: String?
+  genres: List<String>
