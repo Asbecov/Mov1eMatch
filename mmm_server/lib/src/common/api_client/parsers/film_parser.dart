@@ -17,7 +17,10 @@ List<Film> filmParser(List<dynamic> data, Map<int, String> genres) {
 
     result.add(Film(
       title: film["title"],
-      description: film["description"],
+      description: (film["description"] as String).replaceAll(
+        RegExp(r'(<\/?p>)|(\r\n|\r|\n)'),
+        '',
+      ),
       art: verticalPoster["path"],
       genres: genreIds
           .map((id) => genres[id] ?? 'неизвестный')

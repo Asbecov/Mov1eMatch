@@ -52,19 +52,19 @@ class EndpointSession extends _i1.EndpointRef {
         {'pool': pool},
       );
 
-  _i2.Future<_i4.VotingResults?> closeVotingSession(
+  _i2.Future<_i4.VotingResults> closeVotingSession(
           {required String sessionId}) =>
-      caller.callServerEndpoint<_i4.VotingResults?>(
+      caller.callServerEndpoint<_i4.VotingResults>(
         'session',
         'closeVotingSession',
         {'sessionId': sessionId},
       );
 
-  _i2.Future<bool> submitVotes({
+  _i2.Future<void> submitVotes({
     required String sessionId,
-    required Map<String, bool> votes,
+    required List<String> votes,
   }) =>
-      caller.callServerEndpoint<bool>(
+      caller.callServerEndpoint<void>(
         'session',
         'submitVotes',
         {
@@ -73,12 +73,12 @@ class EndpointSession extends _i1.EndpointRef {
         },
       );
 
-  _i2.Stream<dynamic> connectToVotingSession({required String sessionId}) =>
-      caller.callStreamingServerEndpoint<_i2.Stream<dynamic>, dynamic>(
+  _i2.Future<List<_i3.Film>> connectToVotingSession(
+          {required String sessionId}) =>
+      caller.callServerEndpoint<List<_i3.Film>>(
         'session',
         'connectToVotingSession',
         {'sessionId': sessionId},
-        {},
       );
 }
 

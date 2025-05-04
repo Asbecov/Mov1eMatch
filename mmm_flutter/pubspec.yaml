@@ -20,6 +20,9 @@ dependencies:
   flutter_svg: ^2.0.17
   mmm_client:
     path: ../mmm_client
+  equatable: ^2.0.7
+  flutter_bloc: ^9.1.1
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:

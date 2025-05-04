@@ -117,7 +117,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'votes': _i1.ParameterDescription(
               name: 'votes',
-              type: _i1.getType<Map<String, bool>>(),
+              type: _i1.getType<List<String>>(),
               nullable: false,
             ),
           },
@@ -131,7 +131,7 @@ class Endpoints extends _i1.EndpointDispatch {
             votes: params['votes'],
           ),
         ),
-        'connectToVotingSession': _i1.MethodStreamConnector(
+        'connectToVotingSession': _i1.MethodConnector(
           name: 'connectToVotingSession',
           params: {
             'sessionId': _i1.ParameterDescription(
@@ -140,13 +140,10 @@ class Endpoints extends _i1.EndpointDispatch {
               nullable: false,
             )
           },
-          streamParams: {},
-          returnType: _i1.MethodStreamReturnType.streamType,
           call: (
             _i1.Session session,
             Map<String, dynamic> params,
-            Map<String, Stream> streamParams,
-          ) =>
+          ) async =>
               (endpoints['session'] as _i3.SessionEndpoint)
                   .connectToVotingSession(
             session,

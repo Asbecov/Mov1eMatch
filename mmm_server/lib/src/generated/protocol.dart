@@ -12,9 +12,11 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 import 'package:serverpod/protocol.dart' as _i2;
 import 'film.dart' as _i3;
-import 'voting_results.dart' as _i4;
-import 'package:mmm_server/src/generated/film.dart' as _i5;
+import 'not_found_exception.dart' as _i4;
+import 'voting_results.dart' as _i5;
+import 'package:mmm_server/src/generated/film.dart' as _i6;
 export 'film.dart';
+export 'not_found_exception.dart';
 export 'voting_results.dart';
 
 class Protocol extends _i1.SerializationManagerServer {
@@ -37,14 +39,20 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == _i3.Film) {
       return _i3.Film.fromJson(data) as T;
     }
-    if (t == _i4.VotingResults) {
-      return _i4.VotingResults.fromJson(data) as T;
+    if (t == _i4.NotFoundException) {
+      return _i4.NotFoundException.fromJson(data) as T;
+    }
+    if (t == _i5.VotingResults) {
+      return _i5.VotingResults.fromJson(data) as T;
     }
     if (t == _i1.getType<_i3.Film?>()) {
       return (data != null ? _i3.Film.fromJson(data) : null) as T;
     }
-    if (t == _i1.getType<_i4.VotingResults?>()) {
-      return (data != null ? _i4.VotingResults.fromJson(data) : null) as T;
+    if (t == _i1.getType<_i4.NotFoundException?>()) {
+      return (data != null ? _i4.NotFoundException.fromJson(data) : null) as T;
+    }
+    if (t == _i1.getType<_i5.VotingResults?>()) {
+      return (data != null ? _i5.VotingResults.fromJson(data) : null) as T;
     }
     if (t == List<String>) {
       return (data as List).map((e) => deserialize<String>(e)).toList() as T;
@@ -53,13 +61,11 @@ class Protocol extends _i1.SerializationManagerServer {
       return Map.fromEntries((data as List).map((e) => MapEntry(
           deserialize<_i3.Film>(e['k']), deserialize<int>(e['v'])))) as T;
     }
-    if (t == List<_i5.Film>) {
-      return (data as List).map((e) => deserialize<_i5.Film>(e)).toList() as T;
+    if (t == List<_i6.Film>) {
+      return (data as List).map((e) => deserialize<_i6.Film>(e)).toList() as T;
     }
-    if (t == Map<String, bool>) {
-      return (data as Map).map(
-              (k, v) => MapEntry(deserialize<String>(k), deserialize<bool>(v)))
-          as T;
+    if (t == List<String>) {
+      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
@@ -74,7 +80,10 @@ class Protocol extends _i1.SerializationManagerServer {
     if (data is _i3.Film) {
       return 'Film';
     }
-    if (data is _i4.VotingResults) {
+    if (data is _i4.NotFoundException) {
+      return 'NotFoundException';
+    }
+    if (data is _i5.VotingResults) {
       return 'VotingResults';
     }
     className = _i2.Protocol().getClassNameForObject(data);
@@ -93,8 +102,11 @@ class Protocol extends _i1.SerializationManagerServer {
     if (dataClassName == 'Film') {
       return deserialize<_i3.Film>(data['data']);
     }
+    if (dataClassName == 'NotFoundException') {
+      return deserialize<_i4.NotFoundException>(data['data']);
+    }
     if (dataClassName == 'VotingResults') {
-      return deserialize<_i4.VotingResults>(data['data']);
+      return deserialize<_i5.VotingResults>(data['data']);
     }
     if (dataClassName.startsWith('serverpod.')) {
       data['className'] = dataClassName.substring(10);

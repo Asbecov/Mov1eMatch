@@ -187,7 +187,7 @@ class _SessionEndpoint {
     });
   }
 
-  _i3.Future<_i5.VotingResults?> closeVotingSession(
+  _i3.Future<_i5.VotingResults> closeVotingSession(
     _i1.TestSessionBuilder sessionBuilder, {
     required String sessionId,
   }) async {
@@ -208,7 +208,7 @@ class _SessionEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<_i5.VotingResults?>);
+        ) as _i3.Future<_i5.VotingResults>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -216,10 +216,10 @@ class _SessionEndpoint {
     });
   }
 
-  _i3.Future<bool> submitVotes(
+  _i3.Future<void> submitVotes(
     _i1.TestSessionBuilder sessionBuilder, {
     required String sessionId,
-    required Map<String, bool> votes,
+    required List<String> votes,
   }) async {
     return _i1.callAwaitableFunctionAndHandleExceptions(() async {
       var _localUniqueSession =
@@ -241,7 +241,7 @@ class _SessionEndpoint {
         var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
           _localCallContext.arguments,
-        ) as _i3.Future<bool>);
+        ) as _i3.Future<void>);
         return _localReturnValue;
       } finally {
         await _localUniqueSession.close();
@@ -249,35 +249,32 @@ class _SessionEndpoint {
     });
   }
 
-  _i3.Stream<dynamic> connectToVotingSession(
+  _i3.Future<List<_i4.Film>> connectToVotingSession(
     _i1.TestSessionBuilder sessionBuilder, {
     required String sessionId,
-  }) {
-    var _localTestStreamManager = _i1.TestStreamManager<dynamic>();
-    _i1.callStreamFunctionAndHandleExceptions(
-      () async {
-        var _localUniqueSession =
-            (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
-          endpoint: 'session',
-          method: 'connectToVotingSession',
-        );
-        var _localCallContext =
-            await _endpointDispatch.getMethodStreamCallContext(
+  }) async {
+    return _i1.callAwaitableFunctionAndHandleExceptions(() async {
+      var _localUniqueSession =
+          (sessionBuilder as _i1.InternalTestSessionBuilder).internalBuild(
+        endpoint: 'session',
+        method: 'connectToVotingSession',
+      );
+      try {
+        var _localCallContext = await _endpointDispatch.getMethodCallContext(
           createSessionCallback: (_) => _localUniqueSession,
           endpointPath: 'session',
           methodName: 'connectToVotingSession',
-          arguments: {'sessionId': sessionId},
-          requestedInputStreams: [],
+          parameters: _i1.testObjectToJson({'sessionId': sessionId}),
           serializationManager: _serializationManager,
         );
-        await _localTestStreamManager.callStreamMethod(
-          _localCallContext,
+        var _localReturnValue = await (_localCallContext.method.call(
           _localUniqueSession,
-          {},
-        );
-      },
-      _localTestStreamManager.outputStreamController,
-    );
-    return _localTestStreamManager.outputStreamController.stream;
+          _localCallContext.arguments,
+        ) as _i3.Future<List<_i4.Film>>);
+        return _localReturnValue;
+      } finally {
+        await _localUniqueSession.close();
+      }
+    });
   }
 }

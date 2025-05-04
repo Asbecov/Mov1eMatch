@@ -14,7 +14,9 @@ void run(List<String> args) async {
   );
 
   // Prepare search endpoint for work
-  await SearchEndpoint.fetchGenres();
+  final Session session = await pod.createSession();
+  await SearchEndpoint().fetchGenres(session);
+  session.close();
   // Start the server.
   await pod.start();
 }

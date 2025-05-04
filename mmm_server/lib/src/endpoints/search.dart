@@ -18,12 +18,12 @@ class SearchEndpoint extends Endpoint {
     Session session, {
     required String query,
     int offset = 0,
-    int limit = 19,
+    int limit = 20,
   }) async {
     final Map<String, dynamic> params = <String, dynamic>{
       "query": query,
       "from": offset,
-      "to": offset + limit,
+      "to": offset + limit - 1,
     };
 
     try {
@@ -52,7 +52,8 @@ class SearchEndpoint extends Endpoint {
     }
   }
 
-  static Future fetchGenres() async {
+  @ignoreEndpoint
+  Future<void> fetchGenres(Session session) async {
     late final Response<Map<String, dynamic>> response;
 
     try {
@@ -61,18 +62,21 @@ class SearchEndpoint extends Endpoint {
       if (response.statusCode == 200) {
         genres = categoryParser(response.data ?? {});
       } else {
-        Serverpod.instance.logVerbose(
+        session.log(
           """Failed to fetch categories from the IVI API, categories might not work. 
-        IVI API response code being: ${response.statusCode}
-        """,
+          IVI API response code being: ${response.statusCode}
+          """,
+          level: LogLevel.error,
         );
       }
-    } catch (e) {
-      Serverpod.instance.logVerbose(
+    } catch (e, st) {
+      session.log(
         """Failed to fetch categories from the IVI API, categories might not work. 
-        The error being: 
-        $e
+          The error being: 
+          $e
         """,
+        exception: e,
+        stackTrace: st,
       );
       return;
     }

@@ -1,6 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:go_router/go_router.dart';
+
 import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/create/views/create_view.dart';
 
@@ -26,7 +28,7 @@ final GoRouter route = GoRouter(
     GoRoute(
       path: createRoute,
       name: createName,
-      builder: (context, state) => const CreateView(),
+      builder: (context, state) => CreateView(),
     ),
     GoRoute(
       path: vottingRoute,

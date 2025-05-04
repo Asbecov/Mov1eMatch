@@ -7,10 +7,12 @@ class SelectableButton extends StatefulWidget {
     super.key,
     required this.icon,
     required this.onTap,
+    this.tooltip,
   });
 
   final IconData icon;
   final void Function() onTap;
+  final String? tooltip;
 
   @override
   State<SelectableButton> createState() => _BottomBarButtonState();
@@ -18,6 +20,8 @@ class SelectableButton extends StatefulWidget {
 
 class _BottomBarButtonState extends State<SelectableButton> {
   late final FocusNode _focusNode;
+
+  final GlobalKey<TooltipState> _tooltipKey = GlobalKey<TooltipState>();
 
   late ColorScheme _colorScheme;
 
@@ -42,28 +46,40 @@ class _BottomBarButtonState extends State<SelectableButton> {
     super.dispose();
   }
 
-  void _handleFocusChange() => setState(() {});
+  void _handleFocusChange() => setState(() {
+        if (_focusNode.hasFocus) {
+          _tooltipKey.currentState?.ensureTooltipVisible();
+        } else {
+          Tooltip.dismissAllToolTips();
+        }
+      });
 
   @override
   Widget build(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
 
-    return AspectRatio(
-      aspectRatio: 1.0,
-      child: Material(
-        color: themeData.colorScheme.primaryContainer,
-        shape: RoundedRectangleBorder(
-          side: _focusNode.hasFocus
-              ? BorderSide(color: _colorScheme.outline, width: rimSize)
-              : BorderSide.none,
-          borderRadius: BorderRadius.circular(borderRadius),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          focusNode: _focusNode,
-          onTap: widget.onTap,
-          child: Center(
-            child: Icon(widget.icon),
+    return Tooltip(
+      key: _tooltipKey,
+      preferBelow: true,
+      message: widget.tooltip,
+      triggerMode: TooltipTriggerMode.manual,
+      child: AspectRatio(
+        aspectRatio: 1.0,
+        child: Material(
+          color: themeData.colorScheme.primaryContainer,
+          shape: RoundedRectangleBorder(
+            side: _focusNode.hasFocus
+                ? BorderSide(color: _colorScheme.outline, width: rimSize)
+                : BorderSide.none,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            focusNode: _focusNode,
+            onTap: widget.onTap,
+            child: Center(
+              child: Icon(widget.icon),
+            ),
           ),
         ),
       ),
