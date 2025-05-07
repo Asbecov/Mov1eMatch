@@ -48,3 +48,20 @@ class SearchState extends Equatable {
         _hitEnd,
       ];
 }
+
+class SearchErrorState extends SearchState {
+  SearchErrorState.fromState({
+    required SearchState state,
+    this.error,
+    this.stackTrace,
+  }) : super(
+          results: state.results,
+          currentQuery: state.currentQuery,
+          offset: state._offset,
+          limit: state._limit,
+          hitEnd: state._hitEnd,
+        );
+
+  final Object? error;
+  final StackTrace? stackTrace;
+}

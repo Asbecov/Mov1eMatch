@@ -13,3 +13,14 @@ class CreateState extends Equatable {
   @override
   List<Object?> get props => [...selection, selection.length];
 }
+
+class CreateErrorState extends CreateState {
+  CreateErrorState.fromState({
+    required CreateState state,
+    this.error,
+    this.stackTrace,
+  }) : super(selection: state.selection);
+
+  final Object? error;
+  final StackTrace? stackTrace;
+}

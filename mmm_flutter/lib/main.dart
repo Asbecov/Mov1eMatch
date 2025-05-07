@@ -5,7 +5,12 @@ import 'package:mmm_client/mmm_client.dart';
 
 late final Client client;
 void main() {
-  client = Client('http://localhost:8080/');
+  final String serverUrl = String.fromEnvironment(
+    "MASTER-URL",
+    defaultValue: 'http://localhost:8080/',
+  );
+
+  client = Client(serverUrl);
 
   runApp(const MovieMatch());
 }

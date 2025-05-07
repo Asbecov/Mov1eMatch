@@ -1,8 +1,11 @@
 const String createRoute = '/create';
-const String collectionsRoute = '/collections';
-
 const String createName = 'create';
-const String collectionsName = 'collections';
 
-const String vottingRoute = '/voting';
+const String createSessionRoute = '/createSession';
+const String createSessionName = 'createSession';
+
 const String resultsRoute = 'results';
+const String resultsName = 'results';
+
+const String sessionRoute = '/session/:sessionId';
+const String sessionRouteParametr = 'sessionId';

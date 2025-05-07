@@ -31,11 +31,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     Emitter<SearchState> emit,
   ) async {
     if (state.currentQuery != event.newQuery && event.newQuery != '') {
-      final List<Film> results = await client.search.search(
-        query: event.newQuery,
-        offset: 0,
-        limit: pageItemCount,
-      );
+      late final List<Film> results;
+
+      try {
+        results = await client.search.search(
+          query: event.newQuery,
+          offset: 0,
+          limit: pageItemCount,
+        );
+      } catch (e, st) {
+        emit(SearchErrorState.fromState(
+          state: state,
+          error: e,
+          stackTrace: st,
+        ));
+        return;
+      }
 
       emit(state._copyWith(
         results: results,
@@ -52,11 +63,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     Emitter<SearchState> emit,
   ) async {
     if (!state._hitEnd) {
-      final List<Film> results = await client.search.search(
-        query: state.currentQuery,
-        offset: state._offset,
-        limit: pageItemCount,
-      );
+      late final List<Film> results;
+
+      try {
+        results = await client.search.search(
+          query: state.currentQuery,
+          offset: state._offset,
+          limit: pageItemCount,
+        );
+      } catch (e, st) {
+        emit(SearchErrorState.fromState(
+          state: state,
+          error: e,
+          stackTrace: st,
+        ));
+        return;
+      }
 
       emit(state._copyWith(
         results: [...state.results, ...results],
