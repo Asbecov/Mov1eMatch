@@ -7,7 +7,7 @@ class SelectableButton extends StatefulWidget {
     super.key,
     required this.icon,
     required this.onTap,
-    this.tooltip,
+    required this.tooltip,
   });
 
   final IconData icon;

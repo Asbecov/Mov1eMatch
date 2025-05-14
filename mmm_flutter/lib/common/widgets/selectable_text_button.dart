@@ -63,7 +63,7 @@ class _BottomBarButtonState extends State<SelectableTextButton> {
     return Tooltip(
       key: _tooltipKey,
       preferBelow: true,
-      message: widget.tooltip,
+      message: widget.label,
       triggerMode: TooltipTriggerMode.manual,
       child: Material(
         color: themeData.colorScheme.primaryContainer,
@@ -77,12 +77,15 @@ class _BottomBarButtonState extends State<SelectableTextButton> {
         child: InkWell(
           focusNode: _focusNode,
           onTap: widget.onTap,
-          child: Row(
-            spacing: 5.0,
-            children: [
-              Icon(widget.icon),
-              Text(widget.label),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Row(
+              spacing: 5.0,
+              children: [
+                Icon(widget.icon),
+                Text(widget.label),
+              ],
+            ),
           ),
         ),
       ),

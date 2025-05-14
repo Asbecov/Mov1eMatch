@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
 
 import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/create/views/create_view.dart';
-import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
-import 'package:mmm/features/session/views/session_view.dart';
+import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
+import 'package:mmm/features/results/views/results_view.dart';
+import 'package:mmm/features/session/domain/create_session_bloc/bloc.dart';
+import 'package:mmm/features/session/views/create_session_view.dart';
+import 'package:mmm_client/mmm_client.dart';
 
 final GoRouter route = GoRouter(
   initialLocation: createRoute,
@@ -36,20 +40,29 @@ final GoRouter route = GoRouter(
     GoRoute(
       path: createSessionRoute,
       name: createSessionName,
-      builder: (context, state) => BlocProvider<SessionBloc>(
-        create: (context) => SessionBloc(),
-        child: const SessionView(),
+      builder: (context, state) => BlocProvider<CreateSessionBloc>(
+        create: (context) => CreateSessionBloc(),
+        child: CreateSessionView(
+          selection: state.extra as List<Film>,
+        ),
       ),
       routes: <GoRoute>[
         GoRoute(
           path: resultsRoute,
           name: resultsName,
-          builder: (context, state) => const Placeholder(),
+          builder: (context, state) => BlocProvider<ResultsBloc>(
+            create: (context) => ResultsBloc()
+              ..add(ResultsPromptedEvent(
+                sessionId: state.pathParameters[resultsParamName]!,
+              )),
+            child: const ResultsView(),
+          ),
         ),
       ],
     ),
     GoRoute(
       path: sessionRoute,
+      name: sessionName,
       builder: (context, state) => const Placeholder(),
     ),
   ],

@@ -38,18 +38,17 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     RemoveEntryEvent event,
     Emitter<CreateState> emit,
   ) {
-    final List<Film> newSelection = List.from(state.selection);
     try {
+      final List<Film> newSelection = List.from(state.selection);
       newSelection.removeAt(event.index);
+
+      emit(state.copyWith(selection: newSelection));
     } catch (e, st) {
       emit(CreateErrorState.fromState(
         state: state,
         error: e,
         stackTrace: st,
       ));
-      return;
     }
-
-    emit(state.copyWith(selection: newSelection));
   }
 }
