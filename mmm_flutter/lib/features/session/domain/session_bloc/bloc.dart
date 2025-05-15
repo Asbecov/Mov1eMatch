@@ -6,15 +6,15 @@ import 'package:mmm_client/mmm_client.dart';
 part 'state.dart';
 part 'event.dart';
 
-class CreateSessionBloc extends Bloc<CreateSessionEvent, CreateSessionState> {
-  CreateSessionBloc() : super(const CreateSessionState.empty()) {
-    on<PromptedCreateSessionEvent>(_onPromptedCreateSessionEvent);
-    on<CloseCreateSessionEvent>(_onCloseCreateSessionEvent);
+class SessionBloc extends Bloc<SessionEvent, SessionState> {
+  SessionBloc() : super(const SessionState.empty()) {
+    on<PromptedSessionEvent>(_onPromptedSessionEvent);
+    on<CloseSessionEvent>(_onCloseSessionEvent);
   }
 
-  Future _onPromptedCreateSessionEvent(
-    PromptedCreateSessionEvent event,
-    Emitter<CreateSessionState> emit,
+  Future _onPromptedSessionEvent(
+    PromptedSessionEvent event,
+    Emitter<SessionState> emit,
   ) async {
     if (state.sessionId == null) {
       late final String sessionId;
@@ -36,9 +36,9 @@ class CreateSessionBloc extends Bloc<CreateSessionEvent, CreateSessionState> {
     }
   }
 
-  Future _onCloseCreateSessionEvent(
-    CloseCreateSessionEvent event,
-    Emitter<CreateSessionState> emit,
+  Future _onCloseSessionEvent(
+    CloseSessionEvent event,
+    Emitter<SessionState> emit,
   ) async {
     if (state.sessionId != null) {
       try {
@@ -51,7 +51,7 @@ class CreateSessionBloc extends Bloc<CreateSessionEvent, CreateSessionState> {
         ));
       }
 
-      emit(CreateSessionState.empty());
+      emit(SessionState.empty());
     } else {
       emit(state);
     }

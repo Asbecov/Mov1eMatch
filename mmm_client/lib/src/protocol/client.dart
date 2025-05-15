@@ -62,7 +62,7 @@ class EndpointSession extends _i1.EndpointRef {
 
   _i2.Future<void> submitVotes({
     required String sessionId,
-    required List<String> votes,
+    required Map<_i3.Film, bool?> votes,
   }) =>
       caller.callServerEndpoint<void>(
         'session',

@@ -2,8 +2,8 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmm/common/constants/app_constants.dart';
 import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
+import 'package:mmm/features/results/widgets/results_card.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 class ResultsView extends StatefulWidget {
@@ -35,6 +35,22 @@ class _ResultsViewState extends State<ResultsView> {
         appBar: AppBar(),
         body: BlocConsumer<ResultsBloc, ResultsState>(
           listener: (context, state) {
+            if (state is ResultsErrorState &&
+                state.error is NotFoundException) {
+              ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    kDebugMode
+                        ? "${state.error} ${state.stackTrace}"
+                        : "Кажется такой сессии уже не существует",
+                  ),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  showCloseIcon: true,
+                  closeIconColor: Theme.of(context).colorScheme.onError,
+                ),
+              );
+              return;
+            }
             if (state is ResultsErrorState) {
               ScaffoldMessenger.maybeOf(context)?.showSnackBar(
                 SnackBar(
@@ -93,114 +109,4 @@ class _ResultsViewState extends State<ResultsView> {
           },
         ),
       );
-}
-
-class ResultsCard extends StatefulWidget {
-  const ResultsCard({
-    super.key,
-    required this.image,
-    required this.label,
-    required this.place,
-    required this.votes,
-  });
-
-  final ImageProvider image;
-  final String label;
-  final int place;
-  final int votes;
-
-  @override
-  State<ResultsCard> createState() => _ResultsCardState();
-}
-
-class _ResultsCardState extends State<ResultsCard> {
-  late ThemeData _theme;
-  late ColorScheme _colorScheme;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _theme = Theme.of(context);
-    _colorScheme = _theme.colorScheme;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: _colorScheme.surfaceContainer,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(borderRadius),
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Ink(
-                decoration: BoxDecoration(
-                  image: DecorationImage(image: widget.image),
-                  borderRadius: BorderRadius.circular(borderRadius),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Ink(
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                    color: _colorScheme.secondaryContainer,
-                  ),
-                  padding: EdgeInsets.all(5.0),
-                  child: RichText(
-                    text: TextSpan(
-                      children: <InlineSpan>[
-                        TextSpan(text: "№${widget.place} "),
-                        TextSpan(text: "${widget.votes}"),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: <Color>[
-                        Colors.transparent,
-                        Colors.black,
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      borderRadius: BorderRadius.circular(borderRadius),
-                    ),
-                    padding: EdgeInsets.symmetric(
-                      vertical: 5.0,
-                      horizontal: 10.0,
-                    ),
-                    child: Text(
-                      widget.label,
-                      overflow: TextOverflow.fade,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

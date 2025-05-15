@@ -62,7 +62,7 @@ class _CreateViewState extends State<CreateView> {
               icon: Icons.arrow_forward,
               tooltip: 'Дальше',
               onTap: () => context.goNamed(
-                createSessionName,
+                sessionName,
                 extra: context.read<CreateBloc>().state.selection,
               ),
             ),

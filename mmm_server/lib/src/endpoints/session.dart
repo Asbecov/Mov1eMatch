@@ -79,7 +79,7 @@ class SessionEndpoint extends Endpoint {
   Future<void> submitVotes(
     Session session, {
     required String sessionId,
-    required List<String> votes,
+    required Map<Film, bool?> votes,
   }) async {
     if (!sessions.containsKey(sessionId)) {
       session.log(
@@ -92,20 +92,26 @@ class SessionEndpoint extends Endpoint {
       );
     }
 
-    Map<Film, int> curSessionResults = sessions[sessionId]!.$2;
+    Map<Film, int> result = {};
 
-    for (String title in votes) {
-      final Film film = sessions[sessionId]!
-          .$1
-          .firstWhere((Film film) => film.title == title);
+    for (final MapEntry<Film, bool?> vote in votes.entries) {
+      final int curResult = sessions[sessionId]!
+          .$2
+          .entries
+          .firstWhere((value) => (value.key.title == vote.key.title))
+          .value;
 
-      curSessionResults.update(film, (int value) => ++value);
+      result[vote.key] = switch (vote.value) {
+        true => curResult + 1,
+        false => curResult - 1,
+        null => curResult,
+      };
     }
 
     // Update last activity time
     sessions[sessionId] = (
       sessions[sessionId]!.$1,
-      curSessionResults,
+      result,
       DateTime.now(),
     );
   }

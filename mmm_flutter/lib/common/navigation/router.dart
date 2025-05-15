@@ -9,8 +9,10 @@ import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/features/create/views/create_view.dart';
 import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
 import 'package:mmm/features/results/views/results_view.dart';
-import 'package:mmm/features/session/domain/create_session_bloc/bloc.dart';
-import 'package:mmm/features/session/views/create_session_view.dart';
+import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
+import 'package:mmm/features/session/views/session_view.dart';
+import 'package:mmm/features/voting/domain/voting_bloc/bloc.dart';
+import 'package:mmm/features/voting/views/voting_view.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 final GoRouter route = GoRouter(
@@ -38,11 +40,11 @@ final GoRouter route = GoRouter(
       builder: (context, state) => CreateView(),
     ),
     GoRoute(
-      path: createSessionRoute,
-      name: createSessionName,
-      builder: (context, state) => BlocProvider<CreateSessionBloc>(
-        create: (context) => CreateSessionBloc(),
-        child: CreateSessionView(
+      path: sessionRoute,
+      name: sessionName,
+      builder: (context, state) => BlocProvider<SessionBloc>(
+        create: (context) => SessionBloc(),
+        child: SessionView(
           selection: state.extra as List<Film>,
         ),
       ),
@@ -61,9 +63,15 @@ final GoRouter route = GoRouter(
       ],
     ),
     GoRoute(
-      path: sessionRoute,
-      name: sessionName,
-      builder: (context, state) => const Placeholder(),
+      path: votingRoute,
+      name: votingName,
+      builder: (context, state) => BlocProvider<VotingBloc>(
+        create: (context) => VotingBloc()
+          ..add(VotingInitEvent(
+            sessionId: state.pathParameters[votingParamName]!,
+          )),
+        child: VotingView(),
+      ),
     ),
   ],
 );

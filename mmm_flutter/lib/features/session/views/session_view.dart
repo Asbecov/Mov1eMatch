@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
 import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/common/widgets/selectable_text_button.dart';
-import 'package:mmm/features/session/domain/create_session_bloc/bloc.dart';
+import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
 import 'package:mmm_client/mmm_client.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class CreateSessionView extends StatefulWidget {
-  const CreateSessionView({
+class SessionView extends StatefulWidget {
+  const SessionView({
     super.key,
     required this.selection,
   });
@@ -18,21 +18,21 @@ class CreateSessionView extends StatefulWidget {
   final List<Film> selection;
 
   @override
-  State<CreateSessionView> createState() => _CreateSessionViewState();
+  State<SessionView> createState() => _SessionViewState();
 }
 
-class _CreateSessionViewState extends State<CreateSessionView> {
+class _SessionViewState extends State<SessionView> {
   @override
   void initState() {
     context
-        .read<CreateSessionBloc>()
-        .add(PromptedCreateSessionEvent(pool: widget.selection));
+        .read<SessionBloc>()
+        .add(PromptedSessionEvent(pool: widget.selection));
 
     super.initState();
   }
 
   void _onCloseSessionTap(BuildContext context) {
-    final String? id = context.read<CreateSessionBloc>().state.sessionId;
+    final String? id = context.read<SessionBloc>().state.sessionId;
 
     if (id != null) {
       context.goNamed(resultsName, pathParameters: {resultsParamName: id});
@@ -49,10 +49,10 @@ class _CreateSessionViewState extends State<CreateSessionView> {
   }
 
   void _onDebugTap(BuildContext context) {
-    final String? id = context.read<CreateSessionBloc>().state.sessionId;
+    final String? id = context.read<SessionBloc>().state.sessionId;
 
     if (id != null) {
-      context.goNamed(sessionName, pathParameters: {sessionParamName: id});
+      context.goNamed(votingName, pathParameters: {votingParamName: id});
     } else {
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         SnackBar(
@@ -79,25 +79,41 @@ class _CreateSessionViewState extends State<CreateSessionView> {
               ],
             ));
 
-    final CreateSessionBloc bloc = context.read<CreateSessionBloc>();
+    final SessionBloc bloc = context.read<SessionBloc>();
     bloc.stream.listen(
-      (CreateSessionState state) {
-        if (state is! SessionErrorState && context.mounted) {
+      (SessionState state) {
+        if (context.mounted) {
           modalLoadingBarrier.remove();
           modalLoadingBarrier.dispose();
+
           context.goNamed(createName);
+
+          if (state is SessionErrorState) {
+            ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+              SnackBar(
+                content: Text(
+                  kDebugMode
+                      ? "${state.error} ${state.stackTrace}"
+                      : "Что-то пошло не так",
+                ),
+                backgroundColor: Theme.of(context).colorScheme.error,
+                showCloseIcon: true,
+                closeIconColor: Theme.of(context).colorScheme.onError,
+              ),
+            );
+          }
         }
       },
     );
 
-    bloc.add(CloseCreateSessionEvent());
+    bloc.add(CloseSessionEvent());
     Overlay.of(context).insert(modalLoadingBarrier);
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(),
-        body: BlocConsumer<CreateSessionBloc, CreateSessionState>(
+        body: BlocConsumer<SessionBloc, SessionState>(
           listener: (context, state) {
             if (state is SessionErrorState) {
               ScaffoldMessenger.maybeOf(context)?.showSnackBar(

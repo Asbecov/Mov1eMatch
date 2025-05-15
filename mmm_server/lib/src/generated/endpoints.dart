@@ -117,7 +117,7 @@ class Endpoints extends _i1.EndpointDispatch {
             ),
             'votes': _i1.ParameterDescription(
               name: 'votes',
-              type: _i1.getType<List<String>>(),
+              type: _i1.getType<Map<_i4.Film, bool?>>(),
               nullable: false,
             ),
           },

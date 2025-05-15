@@ -60,8 +60,9 @@ class Protocol extends _i1.SerializationManager {
     if (t == List<_i5.Film>) {
       return (data as List).map((e) => deserialize<_i5.Film>(e)).toList() as T;
     }
-    if (t == List<String>) {
-      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    if (t == Map<_i5.Film, bool?>) {
+      return Map.fromEntries((data as List).map((e) => MapEntry(
+          deserialize<_i5.Film>(e['k']), deserialize<bool?>(e['v'])))) as T;
     }
     return super.deserialize<T>(data, t);
   }

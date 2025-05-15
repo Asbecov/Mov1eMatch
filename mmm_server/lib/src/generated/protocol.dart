@@ -64,8 +64,9 @@ class Protocol extends _i1.SerializationManagerServer {
     if (t == List<_i6.Film>) {
       return (data as List).map((e) => deserialize<_i6.Film>(e)).toList() as T;
     }
-    if (t == List<String>) {
-      return (data as List).map((e) => deserialize<String>(e)).toList() as T;
+    if (t == Map<_i6.Film, bool?>) {
+      return Map.fromEntries((data as List).map((e) => MapEntry(
+          deserialize<_i6.Film>(e['k']), deserialize<bool?>(e['v'])))) as T;
     }
     try {
       return _i2.Protocol().deserialize<T>(data, t);
