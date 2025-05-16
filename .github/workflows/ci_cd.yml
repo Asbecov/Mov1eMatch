@@ -5,6 +5,11 @@ on:
   push:
     branches: [ master ]
 
+permissions:
+  contents: write     
+  pages: write        
+  id-token: write 
+
 env:
   FRONTEND_URL: ${{ secrets.FRONTEND_URL }}  
   SERVER_URL:   ${{ secrets.SERVER_URL }}   
