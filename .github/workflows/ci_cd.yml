@@ -1,0 +1,73 @@
+# .github/workflows/ci_cd.yml
+name: CI/CD Monorepo
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  FRONTEND_URL: ${{ secrets.FRONTEND_URL }}  
+  SERVER_URL:   ${{ secrets.SERVER_URL }}   
+
+jobs:
+  build-and-deploy-flutter:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mmm_flutter
+
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Flutter Web
+        run: flutter build web --release \
+          --dart-define=FRONTEND_URL=${{ env.FRONTEND_URL }} \
+          --dart-define=SERVER_URL=${{ env.SERVER_URL }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          personal_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+
+  deploy-server:
+    needs: build-and-deploy-flutter
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mmm_server
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Dart deps
+        run: dart pub get
+
+      - name: Compile server binary
+        run: dart compile exe bin/main.dart -o bin/server
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Copy binary to VPS
+        run: |
+          scp bin/server ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/app/
+
+      - name: Restart server service
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            'sudo systemctl restart serverpod.service'
+
