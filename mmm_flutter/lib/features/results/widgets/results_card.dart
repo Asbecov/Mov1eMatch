@@ -73,6 +73,7 @@ class _ResultsCardState extends State<ResultsCard> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(borderRadius),
                             ),
+                            color: _colorScheme.secondaryContainer,
                           ),
                           padding: EdgeInsets.all(5.0),
                           child: Text("${widget.votes}"),

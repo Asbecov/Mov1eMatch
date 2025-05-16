@@ -67,17 +67,18 @@ class _SessionViewState extends State<SessionView> {
 
   void _onReturnTap(BuildContext context) {
     OverlayEntry modalLoadingBarrier = OverlayEntry(
-        builder: (context) => Stack(
-              children: [
-                Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-                ModalBarrier(
-                  dismissible: false,
-                  color: Colors.black54,
-                ),
-              ],
-            ));
+      builder: (context) => Stack(
+        children: [
+          Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+          ModalBarrier(
+            dismissible: false,
+            color: Colors.black54,
+          ),
+        ],
+      ),
+    );
 
     final SessionBloc bloc = context.read<SessionBloc>();
     bloc.stream.listen(
@@ -110,75 +111,78 @@ class _SessionViewState extends State<SessionView> {
     Overlay.of(context).insert(modalLoadingBarrier);
   }
 
+  Widget _builder(BuildContext context, SessionState state) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 10.0,
+          children: [
+            Text("Просканируйте QR код для голосования на телефоне:"),
+            Expanded(
+              child: Center(
+                child: state.sessionId == null
+                    ? CircularProgressIndicator.adaptive()
+                    : Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(borderRadius),
+                          color: Colors.white,
+                        ),
+                        child: QrImageView(
+                          data:
+                              '$frontendUrl${votingRoute.split('/').first}/${state.sessionId!}',
+                        ),
+                      ),
+              ),
+            ),
+            Row(
+              spacing: 10.0,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SelectableTextButton(
+                  icon: Icons.arrow_forward,
+                  label: "Закончить голосование",
+                  onTap: () => _onCloseSessionTap(context),
+                ),
+                SelectableTextButton(
+                  icon: Icons.close,
+                  label: "Вернуться к выбору",
+                  onTap: () => _onReturnTap(context),
+                ),
+                if (kDebugMode)
+                  SelectableTextButton(
+                    icon: Icons.abc,
+                    label: "Debug",
+                    onTap: () => _onDebugTap(context),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  void _listener(BuildContext context, SessionState state) {
+    if (state is SessionErrorState) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: Text(
+            kDebugMode
+                ? "${state.error} ${state.stackTrace}"
+                : "Поробуйте позже",
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          showCloseIcon: true,
+          closeIconColor: Theme.of(context).colorScheme.onError,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(),
         body: BlocConsumer<SessionBloc, SessionState>(
-          listener: (context, state) {
-            if (state is SessionErrorState) {
-              ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-                SnackBar(
-                  content: Text(
-                    kDebugMode
-                        ? "${state.error} ${state.stackTrace}"
-                        : "Поробуйте позже",
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                  showCloseIcon: true,
-                  closeIconColor: Theme.of(context).colorScheme.onError,
-                ),
-              );
-            }
-          },
-          buildWhen: (context, state) => state is! SessionErrorState,
-          builder: (context, state) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              spacing: 10.0,
-              children: [
-                Text("Просканируйте QR код для голосования на телефоне:"),
-                Expanded(
-                  child: state.sessionId == null
-                      ? CircularProgressIndicator.adaptive()
-                      : Center(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(borderRadius),
-                              color: Colors.white,
-                            ),
-                            child: QrImageView(
-                              data:
-                                  '$frontendUrl${votingRoute.split('/').first}/${state.sessionId!}',
-                            ),
-                          ),
-                        ),
-                ),
-                Row(
-                  spacing: 10.0,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SelectableTextButton(
-                      icon: Icons.arrow_forward,
-                      label: "Закончить голосование",
-                      onTap: () => _onCloseSessionTap(context),
-                    ),
-                    SelectableTextButton(
-                      icon: Icons.close,
-                      label: "Вернуться к выбору",
-                      onTap: () => _onReturnTap(context),
-                    ),
-                    if (kDebugMode)
-                      SelectableTextButton(
-                        icon: Icons.abc,
-                        label: "Debug",
-                        onTap: () => _onDebugTap(context),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
+          listener: _listener,
+          builder: _builder,
         ),
       );
 }

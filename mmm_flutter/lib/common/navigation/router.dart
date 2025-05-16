@@ -48,19 +48,17 @@ final GoRouter route = GoRouter(
           selection: state.extra as List<Film>? ?? <Film>[],
         ),
       ),
-      routes: <GoRoute>[
-        GoRoute(
-          path: resultsRoute,
-          name: resultsName,
-          builder: (context, state) => BlocProvider<ResultsBloc>(
-            create: (context) => ResultsBloc()
-              ..add(ResultsPromptedEvent(
-                sessionId: state.pathParameters[resultsParamName]!,
-              )),
-            child: const ResultsView(),
-          ),
-        ),
-      ],
+    ),
+    GoRoute(
+      path: resultsRoute,
+      name: resultsName,
+      builder: (context, state) => BlocProvider<ResultsBloc>(
+        create: (context) => ResultsBloc()
+          ..add(ResultsPromptedEvent(
+            sessionId: state.pathParameters[resultsParamName]!,
+          )),
+        child: const ResultsView(),
+      ),
     ),
     GoRoute(
       path: votingRoute,

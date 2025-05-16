@@ -31,8 +31,6 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       }
 
       emit(state._copyWith(sessionId: sessionId));
-    } else {
-      emit(state);
     }
   }
 
@@ -53,7 +51,9 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
       emit(SessionState.empty());
     } else {
-      emit(state);
+      emit(state._copyWith(
+        sessionId: "Didn't have to close",
+      ));
     }
   }
 }

@@ -4,7 +4,7 @@ const String createName = 'create';
 const String sessionRoute = '/session';
 const String sessionName = 'session';
 
-const String resultsRoute = 'results/:$resultsParamName';
+const String resultsRoute = '/results/:$resultsParamName';
 const String resultsName = 'results';
 const String resultsParamName = 'sessionId';
 
