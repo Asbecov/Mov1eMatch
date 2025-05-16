@@ -31,7 +31,8 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter Web
-        run: flutter build web --release \
+        run: | 
+          flutter build web --release \
           --dart-define=FRONTEND_URL=${{ env.FRONTEND_URL }} \
           --dart-define=SERVER_URL=${{ env.SERVER_URL }}
 
