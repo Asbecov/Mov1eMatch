@@ -9,7 +9,7 @@ import 'package:mmm_client/mmm_client.dart';
 
 import 'package:mmm/common/widgets/text_field.dart';
 
-import 'package:mmm/features/create/widgets/search_selectable_button.dart';
+import 'package:mmm/features/create/widgets/search_selectable_card.dart';
 import 'package:mmm/features/create/widgets/selectable_suggestion_button.dart';
 
 class SearchModalSheet extends StatefulWidget {
@@ -63,17 +63,13 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
   Widget build(BuildContext context) => CustomScrollView(
         controller: _scrollController,
         slivers: <Widget>[
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            title: SizedBox(
+          SliverToBoxAdapter(
+            child: Container(
               height: kToolbarHeight,
-              width: double.infinity,
-              child: Padding(
-                padding: EdgeInsets.all(5.0),
-                child: MovieMatcherTextField(
-                  hint: "Начните поиск фильмов",
-                  textEditingController: _textEditingController!,
-                ),
+              padding: EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+              child: MovieMatcherTextField(
+                hint: "Начните поиск фильмов",
+                textEditingController: _textEditingController!,
               ),
             ),
           ),
