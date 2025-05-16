@@ -17,9 +17,6 @@ env:
 jobs:
   build-and-deploy-flutter:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./mmm_flutter
 
     steps:
       - name: Checkout monorepo
@@ -34,21 +31,25 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+        working-directory: mmm_flutter/
 
       - name: Build Flutter Web
         run: | 
+          cd mmm_flutter/
           flutter build web --wasm --base-href="/Mov1eMatch/" --release \
           --dart-define=FRONTEND_URL=${{ env.FRONTEND_URL }} \
           --dart-define=SERVER_URL=${{ env.SERVER_URL }}
 
       - name: Copy 404.html to build folder
-        run: cp web/404.html build/web/404.html
+        run: |
+          cd mmm_flutter/ 
+          cp web/404.html build/web/404.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: build/web
+          publish_dir: mmm_flutter/build/web
           force_orphan: true
           user_name: 'github-ci[bot]'
           user_email: 'github-actions[bot]@users.noreply.github.com'
