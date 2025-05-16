@@ -3,7 +3,7 @@ name: CI/CD Monorepo
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 env:
   FRONTEND_URL: ${{ secrets.FRONTEND_URL }}  
