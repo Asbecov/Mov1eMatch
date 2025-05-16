@@ -98,9 +98,8 @@ class _ResultsViewState extends State<ResultsView> {
               return ConfettiWidget(
                 confettiController: _controller,
                 child: Center(
-                  child: Wrap(
+                  child: Row(
                     spacing: 10.0,
-                    runSpacing: 10.0,
                     children: children.getRange(0, 3).toList(),
                   ),
                 ),

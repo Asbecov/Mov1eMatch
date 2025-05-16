@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-and-deploy-flutter:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./mmm_flutter
