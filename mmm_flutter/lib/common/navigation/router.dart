@@ -45,7 +45,7 @@ final GoRouter route = GoRouter(
       builder: (context, state) => BlocProvider<SessionBloc>(
         create: (context) => SessionBloc(),
         child: SessionView(
-          selection: state.extra as List<Film>,
+          selection: state.extra as List<Film>? ?? <Film>[],
         ),
       ),
       routes: <GoRoute>[
