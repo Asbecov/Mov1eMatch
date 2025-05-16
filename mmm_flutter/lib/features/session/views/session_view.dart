@@ -148,8 +148,8 @@ class _SessionViewState extends State<SessionView> {
                               color: Colors.white,
                             ),
                             child: QrImageView(
-                              data: String.fromEnvironment("FRONTED-URL") +
-                                  state.sessionId!,
+                              data:
+                                  '$frontendUrl${votingRoute.split('/').first}/${state.sessionId!}',
                             ),
                           ),
                         ),
