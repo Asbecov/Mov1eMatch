@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mmm/common/constants/app_constants.dart';
 import 'package:mmm/common/constants/assets.dart';
 import 'package:mmm/common/constants/routing_constants.dart';
 
@@ -127,7 +128,7 @@ class _CreateViewState extends State<CreateView> {
                 )
               : Center(
                   child: Text(
-                    'Кажется тут ничего нету,\n попробуйте добавить фильмы через функцию поиска!',
+                    'Кажется тут ничего нету,\nпопробуйте добавить фильмы через функцию поиска!\n$serverUrl',
                     textAlign: TextAlign.center,
                   ),
                 ),
