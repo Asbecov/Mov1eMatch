@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mmm/common/constants/assets.dart';
 
 import 'package:mmm/features/create/domain/create_bloc/bloc.dart';
 import 'package:mmm/features/create/domain/search_bloc/bloc.dart';
@@ -119,7 +120,7 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
                     genres: state.results[index - 1].genres,
                     image: state.results[index - 1].art != null
                         ? NetworkImage(state.results[index - 1].art!)
-                        : AssetImage('assets/pine_trees.jpg'),
+                        : AssetImage(kUnknown),
                   );
                 },
                 childCount: state.results.length + 1,

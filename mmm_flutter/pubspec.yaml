@@ -51,5 +51,6 @@ flutter:
         - asset: fonts\Montserrat-VariableFont_wght.ttf
 
   assets:
-    - assets/logotype.svg
-    - assets/pine_trees.jpg
+    - assets/logo.svg
+    - assets/unknown.png
+    - assets/logo_with_text.svg

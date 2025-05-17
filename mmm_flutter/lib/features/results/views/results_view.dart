@@ -4,6 +4,11 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mmm/common/constants/assets.dart';
+import 'package:mmm/common/constants/routing_constants.dart';
+import 'package:mmm/common/widgets/selectable_button.dart';
 import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
 import 'package:mmm/features/results/widgets/results_card.dart';
 import 'package:mmm_client/mmm_client.dart';
@@ -110,7 +115,7 @@ class _ResultsViewState extends State<ResultsView> {
             child: ResultsCard(
               image: entry.key.art != null
                   ? NetworkImage(entry.key.art!)
-                  : AssetImage('assets/pine_trees'),
+                  : AssetImage(kUnknown),
               label: entry.key.title,
               place: i + 1,
               votes: entry.value,
@@ -120,49 +125,57 @@ class _ResultsViewState extends State<ResultsView> {
       );
     }
 
-    return Stack(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Align(
-          alignment: Alignment.center,
-          child: Row(
-            spacing: 10.0,
-            children: children,
-          ),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: ConfettiWidget(
-            confettiController: _controllerTopLeft,
-            blastDirectionality: BlastDirectionality.directional,
-            blastDirection: 7 * pi / 4,
-            shouldLoop: true,
-          ),
-        ),
-        Align(
-          alignment: Alignment.topRight,
-          child: ConfettiWidget(
-            confettiController: _controllerTopRight,
-            blastDirectionality: BlastDirectionality.directional,
-            blastDirection: 5 * pi / 4,
-            shouldLoop: true,
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: ConfettiWidget(
-            confettiController: _controllerBottomRight,
-            blastDirectionality: BlastDirectionality.directional,
-            blastDirection: 3 * pi / 4,
-            shouldLoop: true,
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: ConfettiWidget(
-            confettiController: _controllerBottomLeft,
-            blastDirectionality: BlastDirectionality.directional,
-            blastDirection: pi / 4,
-            shouldLoop: true,
+        Text("Результаты голосования:"),
+        Expanded(
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Row(
+                  spacing: 10.0,
+                  children: children,
+                ),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: ConfettiWidget(
+                  confettiController: _controllerTopLeft,
+                  blastDirectionality: BlastDirectionality.directional,
+                  blastDirection: 7 * pi / 4,
+                  shouldLoop: true,
+                ),
+              ),
+              Align(
+                alignment: Alignment.topRight,
+                child: ConfettiWidget(
+                  confettiController: _controllerTopRight,
+                  blastDirectionality: BlastDirectionality.directional,
+                  blastDirection: 5 * pi / 4,
+                  shouldLoop: true,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: ConfettiWidget(
+                  confettiController: _controllerBottomRight,
+                  blastDirectionality: BlastDirectionality.directional,
+                  blastDirection: 3 * pi / 4,
+                  shouldLoop: true,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: ConfettiWidget(
+                  confettiController: _controllerBottomLeft,
+                  blastDirectionality: BlastDirectionality.directional,
+                  blastDirection: pi / 4,
+                  shouldLoop: true,
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -171,7 +184,28 @@ class _ResultsViewState extends State<ResultsView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            child: SvgPicture.asset(
+              kTextLogo,
+              alignment: Alignment.centerLeft,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          leadingWidth: double.infinity,
+          actionsPadding: EdgeInsets.all(5),
+          actions: <Widget>[
+            SelectableButton(
+              icon: Icons.clear,
+              tooltip: 'Вернуться',
+              onTap: () => context.goNamed(createName),
+            ),
+          ],
+        ),
         body: BlocConsumer<ResultsBloc, ResultsState>(
           listener: _listener,
           builder: _builder,

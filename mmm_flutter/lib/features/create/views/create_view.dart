@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mmm/common/constants/assets.dart';
 import 'package:mmm/common/constants/routing_constants.dart';
 
 import 'package:mmm/features/create/domain/create_bloc/bloc.dart';
@@ -50,6 +52,18 @@ class _CreateViewState extends State<CreateView> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
+          leading: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            child: SvgPicture.asset(
+              kTextLogo,
+              alignment: Alignment.centerLeft,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          leadingWidth: double.infinity,
           actionsPadding: EdgeInsets.all(5),
           actions: <Widget>[
             SelectableButton(
@@ -100,7 +114,7 @@ class _CreateViewState extends State<CreateView> {
                         key: ValueKey(index),
                         image: state.selection[index].art != null
                             ? NetworkImage(state.selection[index].art!)
-                            : AssetImage('assets/pine_trees.jpg'),
+                            : AssetImage(kUnknown),
                         label: state.selection[index].title,
                         onDelete: (id) => context.read<CreateBloc>().add(
                               RemoveEntryEvent(

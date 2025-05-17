@@ -10,10 +10,6 @@ permissions:
   pages: write        
   id-token: write 
 
-env:
-  FRONTEND_URL: ${{ secrets.FRONTEND_URL }}  
-  SERVER_URL:   ${{ secrets.SERVER_URL }}   
-
 jobs:
   build-and-deploy-flutter:
     runs-on: ubuntu-latest
@@ -36,9 +32,7 @@ jobs:
       - name: Build Flutter Web
         run: | 
           cd mmm_flutter/
-          flutter build web --wasm -t lib/main_web.dart --base-href="/Mov1eMatch/" --release \
-          --dart-define=FRONTEND_URL=${{ env.FRONTEND_URL }} \
-          --dart-define=SERVER_URL=${{ env.SERVER_URL }}
+          flutter build web --wasm -t lib/main_web.dart --base-href="/Mov1eMatch/" --release --dart-define=FRONTEND_URL=${{ secrets.FRONTEND_URL }} --dart-define=SERVER_URL=${{ secrets.SERVER_URL }}
 
       - name: Copy 404.html to build folder
         run: |

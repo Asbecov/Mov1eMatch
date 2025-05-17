@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
+import 'package:mmm/common/constants/assets.dart';
 import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/common/widgets/selectable_text_button.dart';
 import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
@@ -129,7 +131,7 @@ class _SessionViewState extends State<SessionView> {
                         ),
                         child: QrImageView(
                           data:
-                              '$frontendUrl${votingRoute.split('/').first}/${state.sessionId!}',
+                              '$frontendUrl${votingRoute.split('/')[1]}/${state.sessionId!}',
                         ),
                       ),
               ),
@@ -179,7 +181,20 @@ class _SessionViewState extends State<SessionView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          leading: Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 5.0),
+            child: SvgPicture.asset(
+              kTextLogo,
+              alignment: Alignment.centerLeft,
+              colorFilter: ColorFilter.mode(
+                Theme.of(context).colorScheme.onSurface,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+          leadingWidth: double.infinity,
+        ),
         body: BlocConsumer<SessionBloc, SessionState>(
           listener: _listener,
           builder: _builder,
