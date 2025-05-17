@@ -71,15 +71,12 @@ jobs:
             git pull origin master
             cd ./mmm_server
 
-            # Останавливаем и удаляем старый контейнер, если он существует
             docker stop mmm-serverpod || true
             docker rm mmm-serverpod || true
-
-            # Собираем и запускаем новый контейнер
+           
             docker build -t mmm-serverpod .
             docker run -d --name mmm-serverpod -p 8080:8080 mmm-serverpod
 
-            # Очищаем старые и неиспользуемые образы
             docker image prune -f
           EOF
 
