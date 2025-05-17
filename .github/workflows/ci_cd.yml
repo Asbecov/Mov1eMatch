@@ -32,7 +32,7 @@ jobs:
       - name: Build Flutter Web
         run: | 
           cd mmm_flutter/
-          flutter build web --wasm -t lib/main_web.dart --base-href="/Mov1eMatch/" --dart-define=FRONTEND_URL=${{ secrets.FRONTEND_URL }} --dart-define=SERVER_URL=${{ secrets.SERVER_URL }}
+          flutter build web --wasm -t lib/main_web.dart --base-href="/Mov1eMatch/" --debug --dart-define=FRONTEND_URL=${{ secrets.FRONTEND_URL }} --dart-define=SERVER_URL=${{ secrets.SERVER_URL }}
 
       - name: Copy 404.html to build folder
         run: |
