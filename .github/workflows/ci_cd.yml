@@ -65,25 +65,18 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
-
-      - name: Install Dart deps
-        run: dart pub get
-
-      - name: Compile server binary
-        run: dart compile exe bin/main.dart -o bin/server
-
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.7.0
         with:
           ssh-private-key: ${{ secrets.SSH_KEY }}
 
-      - name: Copy binary to VPS
+      - name: Deploy to VPS
         run: |
-          scp bin/server ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/app/
-
-      - name: Restart server service
-        run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
-            'sudo systemctl restart serverpod.service'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ./Mov1eMatch
+            git pull origin master
+            cd ./mmm_server
+            docker build -t mmm-serverpod .
+            docker run -d -p 8080:8080 mmm-serverpod
+          EOF
 
