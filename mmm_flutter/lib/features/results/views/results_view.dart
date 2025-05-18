@@ -7,12 +7,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mmm/common/constants/app_constants.dart';
-import 'package:mmm/common/constants/assets.dart';
-import 'package:mmm/common/constants/routing_constants.dart';
-import 'package:mmm/common/widgets/selectable_button.dart';
-import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
-import 'package:mmm/features/results/widgets/results_card.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/assets.dart';
+import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/common/widgets/selectable_button.dart';
+import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
+import 'package:movie_match/features/results/widgets/results_card.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 class ResultsView extends StatelessWidget {

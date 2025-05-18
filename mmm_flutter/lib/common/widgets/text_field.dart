@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:mmm/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
 
-class MovieMatcherTextField extends StatefulWidget {
-  const MovieMatcherTextField({
+class movie_matcherTextField extends StatefulWidget {
+  const movie_matcherTextField({
     super.key,
     required this.hint,
     required this.textEditingController,
@@ -13,10 +13,10 @@ class MovieMatcherTextField extends StatefulWidget {
   final TextEditingController textEditingController;
 
   @override
-  State<MovieMatcherTextField> createState() => _MovieMatcherTextFieldState();
+  State<movie_matcherTextField> createState() => _movie_matcherTextFieldState();
 }
 
-class _MovieMatcherTextFieldState extends State<MovieMatcherTextField> {
+class _movie_matcherTextFieldState extends State<movie_matcherTextField> {
   late final FocusNode _focusNode;
   late ColorScheme colorScheme;
 

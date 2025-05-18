@@ -1,5 +1,5 @@
-name: mmm
-description: "A new Flutter project."
+name: movie_match
+description: "Choose a movie for the evening!"
 
 publish_to: "none"
 

@@ -5,14 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:mmm/common/constants/routing_constants.dart';
-import 'package:mmm/features/create/views/create_view.dart';
-import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
-import 'package:mmm/features/results/views/results_view.dart';
-import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
-import 'package:mmm/features/session/views/session_view.dart';
-import 'package:mmm/features/voting/domain/voting_bloc/bloc.dart';
-import 'package:mmm/features/voting/views/voting_view.dart';
+import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/features/create/views/create_view.dart';
+import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
+import 'package:movie_match/features/results/views/results_view.dart';
+import 'package:movie_match/features/session/domain/session_bloc/bloc.dart';
+import 'package:movie_match/features/session/views/session_view.dart';
+import 'package:movie_match/features/voting/domain/voting_bloc/bloc.dart';
+import 'package:movie_match/features/voting/views/voting_view.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 final GoRouter route = GoRouter(

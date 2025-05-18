@@ -2,17 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmm/common/constants/app_constants.dart';
-import 'package:mmm/common/constants/assets.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/assets.dart';
 
-import 'package:mmm/features/create/domain/create_bloc/bloc.dart';
-import 'package:mmm/features/create/domain/search_bloc/bloc.dart';
+import 'package:movie_match/features/create/domain/create_bloc/bloc.dart';
+import 'package:movie_match/features/create/domain/search_bloc/bloc.dart';
 import 'package:mmm_client/mmm_client.dart';
 
-import 'package:mmm/common/widgets/text_field.dart';
+import 'package:movie_match/common/widgets/text_field.dart';
 
-import 'package:mmm/features/create/widgets/search_selectable_card.dart';
-import 'package:mmm/features/create/widgets/selectable_suggestion_button.dart';
+import 'package:movie_match/features/create/widgets/search_selectable_card.dart';
+import 'package:movie_match/features/create/widgets/selectable_suggestion_button.dart';
 
 class SearchModalSheet extends StatefulWidget {
   const SearchModalSheet({super.key});
@@ -69,7 +69,7 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
             child: Container(
               height: 60.0,
               margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: MovieMatcherTextField(
+              child: movie_matcherTextField(
                 hint: "Начните поиск фильмов",
                 textEditingController: _textEditingController!,
               ),

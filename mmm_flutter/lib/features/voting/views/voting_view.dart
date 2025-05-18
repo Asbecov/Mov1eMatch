@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:mmm/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
 
-import 'package:mmm/common/constants/assets.dart';
-import 'package:mmm/common/widgets/selectable_button.dart';
-import 'package:mmm/features/voting/domain/voting_bloc/bloc.dart';
-import 'package:mmm/features/voting/widget/voting_card.dart';
+import 'package:movie_match/common/constants/assets.dart';
+import 'package:movie_match/common/widgets/selectable_button.dart';
+import 'package:movie_match/features/voting/domain/voting_bloc/bloc.dart';
+import 'package:movie_match/features/voting/widget/voting_card.dart';
 
 import 'package:mmm_client/mmm_client.dart';
 

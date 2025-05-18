@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'package:mmm/main.dart';
+import 'package:movie_match/main.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 part 'state.dart';
