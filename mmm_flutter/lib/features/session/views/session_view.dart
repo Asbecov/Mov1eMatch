@@ -129,6 +129,7 @@ class _SessionViewState extends State<SessionView> {
                           borderRadius: BorderRadius.circular(borderRadius),
                           color: Colors.white,
                         ),
+                        margin: EdgeInsets.symmetric(horizontal: 10.0),
                         child: QrImageView(
                           data:
                               '$frontendUrl${votingRoute.split('/')[1]}/${state.sessionId!}',

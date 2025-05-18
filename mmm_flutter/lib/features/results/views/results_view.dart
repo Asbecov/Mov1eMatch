@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:confetti/confetti.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_confetti/flutter_confetti.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mmm/common/constants/app_constants.dart';
@@ -14,49 +15,8 @@ import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
 import 'package:mmm/features/results/widgets/results_card.dart';
 import 'package:mmm_client/mmm_client.dart';
 
-class ResultsView extends StatefulWidget {
+class ResultsView extends StatelessWidget {
   const ResultsView({super.key});
-
-  @override
-  State<ResultsView> createState() => _ResultsViewState();
-}
-
-class _ResultsViewState extends State<ResultsView> {
-  late ConfettiController _controllerTopRight;
-  late ConfettiController _controllerTopLeft;
-  late ConfettiController _controllerBottomLeft;
-  late ConfettiController _controllerBottomRight;
-  late final List<ConfettiController> _controllers;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controllerTopRight =
-        ConfettiController(duration: const Duration(seconds: 10));
-    _controllerTopLeft =
-        ConfettiController(duration: const Duration(seconds: 10));
-    _controllerBottomLeft =
-        ConfettiController(duration: const Duration(seconds: 10));
-    _controllerBottomRight =
-        ConfettiController(duration: const Duration(seconds: 10));
-
-    _controllers = [
-      _controllerTopRight,
-      _controllerTopLeft,
-      _controllerBottomLeft,
-      _controllerBottomRight,
-    ];
-  }
-
-  @override
-  void dispose() {
-    for (final ConfettiController controller in _controllers) {
-      controller.dispose();
-    }
-
-    super.dispose();
-  }
 
   void _listener(BuildContext context, ResultsState state) {
     if (state is ResultsErrorState && state.error is NotFoundException) {
@@ -86,9 +46,46 @@ class _ResultsViewState extends State<ResultsView> {
         ),
       );
     } else if (state.results.isNotEmpty) {
-      for (final ConfettiController controller in _controllers) {
-        controller.play();
+      double randomInRange(double min, double max) {
+        return min + Random().nextDouble() * (max - min);
       }
+
+      int total = 30;
+      int progress = 0;
+
+      Timer.periodic(const Duration(milliseconds: 250), (timer) {
+        progress++;
+
+        if (progress >= total) {
+          timer.cancel();
+          return;
+        }
+
+        int count = ((1 - progress / total) * 50).toInt();
+
+        Confetti.launch(
+          context,
+          options: ConfettiOptions(
+            particleCount: count,
+            startVelocity: 30,
+            spread: 360,
+            ticks: 60,
+            x: randomInRange(0.1, 0.3),
+            y: Random().nextDouble() - 0.2,
+          ),
+        );
+        Confetti.launch(
+          context,
+          options: ConfettiOptions(
+            particleCount: count,
+            startVelocity: 30,
+            spread: 360,
+            ticks: 60,
+            x: randomInRange(0.7, 0.9),
+            y: Random().nextDouble() - 0.2,
+          ),
+        );
+      });
     }
   }
 
@@ -129,60 +126,24 @@ class _ResultsViewState extends State<ResultsView> {
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text("Результаты голосования:"),
-        Expanded(
-          child: Stack(
-            children: [
-              Align(
-                alignment: Alignment.center,
-                child: Row(
-                  spacing: 10.0,
-                  children: children,
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: ConfettiWidget(
-                  confettiController: _controllerTopLeft,
-                  blastDirectionality: BlastDirectionality.directional,
-                  blastDirection: 7 * pi / 4,
-                  shouldLoop: true,
-                ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: ConfettiWidget(
-                  confettiController: _controllerTopRight,
-                  blastDirectionality: BlastDirectionality.directional,
-                  blastDirection: 5 * pi / 4,
-                  shouldLoop: true,
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: ConfettiWidget(
-                  confettiController: _controllerBottomRight,
-                  blastDirectionality: BlastDirectionality.directional,
-                  blastDirection: 3 * pi / 4,
-                  shouldLoop: true,
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: ConfettiWidget(
-                  confettiController: _controllerBottomLeft,
-                  blastDirectionality: BlastDirectionality.directional,
-                  blastDirection: pi / 4,
-                  shouldLoop: true,
-                ),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10.0,
+        children: [
+          Text(
+            "Результаты голосования:",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w400,
+            ),
           ),
-        ),
-      ],
+          Expanded(
+            child: Row(spacing: 10.0, children: children),
+          ),
+        ],
+      ),
     );
   }
 

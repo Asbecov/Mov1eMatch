@@ -32,7 +32,7 @@ dependencies:
   rxdart: ^0.28.0
   qr_flutter: ^4.1.0
   flutter_card_swiper: ^7.0.2
-  confetti: ^0.8.0
+  flutter_confetti: ^0.5.1
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +54,6 @@ flutter:
     - assets/logo.svg
     - assets/unknown.png
     - assets/logo_with_text.svg
+    - assets/number_one.svg
+    - assets/number_three.svg
+    - assets/number_two.svg

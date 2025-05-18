@@ -67,8 +67,8 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
         slivers: <Widget>[
           SliverToBoxAdapter(
             child: Container(
-              height: kToolbarHeight,
-              padding: EdgeInsets.only(left: 10.0, bottom: 10.0, right: 10.0),
+              height: 60.0,
+              margin: EdgeInsets.only(left: 10.0, right: 10.0),
               child: MovieMatcherTextField(
                 hint: "Начните поиск фильмов",
                 textEditingController: _textEditingController!,

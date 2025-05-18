@@ -48,44 +48,42 @@ class _MovieMatcherTextFieldState extends State<MovieMatcherTextField> {
         cursor: SystemMouseCursors.text,
         child: GestureDetector(
           onTap: () => _focusNode.requestFocus(),
-          child: Container(
-            height: double.infinity,
-            alignment: Alignment.centerLeft,
-            decoration: BoxDecoration(
-              color: colorScheme.surfaceContainerHighest,
-              border: Border.all(
-                width: rimSize,
-                color: _focusNode.hasFocus
-                    ? colorScheme.outline
-                    : Colors.transparent,
-              ),
+          child: Material(
+            color: colorScheme.surfaceContainerHighest,
+            shape: RoundedRectangleBorder(
+              side: _focusNode.hasFocus
+                  ? BorderSide(color: colorScheme.outline, width: rimSize)
+                  : BorderSide.none,
               borderRadius: BorderRadius.circular(borderRadius),
             ),
-            child: Material(
-              color: colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: TextField(
-                scrollPadding: EdgeInsets.zero,
-                focusNode: _focusNode,
-                controller: widget.textEditingController,
-                decoration: InputDecoration(
-                  constraints: BoxConstraints.expand(),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                  hintText: widget.hint,
-                  border: OutlineInputBorder(borderSide: BorderSide.none),
-                  errorBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                  enabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  focusedBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  disabledBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  focusedErrorBorder:
-                      OutlineInputBorder(borderSide: BorderSide.none),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                ),
-              ),
-            ),
+            child: LayoutBuilder(
+                builder: (context, constraints) => TextField(
+                      textAlignVertical: TextAlignVertical.bottom,
+                      scrollPadding: EdgeInsets.zero,
+                      focusNode: _focusNode,
+                      controller: widget.textEditingController,
+                      onEditingComplete: () => _focusNode.nextFocus(),
+                      decoration: InputDecoration(
+                        constraints: BoxConstraints.expand(),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: constraints.maxHeight / 2,
+                        ),
+                        hintText: widget.hint,
+                        border: OutlineInputBorder(borderSide: BorderSide.none),
+                        errorBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        enabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        disabledBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        focusedErrorBorder:
+                            OutlineInputBorder(borderSide: BorderSide.none),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                      ),
+                    )),
           ),
         ),
       );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mmm/common/constants/app_constants.dart';
+import 'package:mmm/common/constants/assets.dart';
 
 class ResultsCard extends StatefulWidget {
   const ResultsCard({
@@ -8,7 +10,7 @@ class ResultsCard extends StatefulWidget {
     required this.label,
     required this.place,
     required this.votes,
-  });
+  }) : assert(place <= 3, "Place can't be higher than 3");
 
   final ImageProvider image;
   final String label;
@@ -33,90 +35,89 @@ class _ResultsCardState extends State<ResultsCard> {
 
   @override
   Widget build(BuildContext context) => AspectRatio(
-        aspectRatio: 2 / 3,
-        child: Material(
-          color: _colorScheme.surfaceContainer,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Ink(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: widget.image),
-                      borderRadius: BorderRadius.circular(borderRadius),
+        aspectRatio: 1.0,
+        child: LayoutBuilder(
+            builder: (context, constraints) => Stack(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: SvgPicture.asset(
+                        switch (widget.place) {
+                          1 => number1,
+                          2 => number2,
+                          3 => number3,
+                          _ => number3,
+                        },
+                        height: constraints.maxHeight / 3.5,
+                      ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10.0,
-                      children: [
-                        Ink(
-                          decoration: ShapeDecoration(
-                            shape:
-                                StarBorder(points: 15, innerRadiusRatio: 0.9),
-                            color: _colorScheme.secondaryContainer,
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: AspectRatio(
+                        aspectRatio: 2 / 3,
+                        child: Material(
+                          color: _colorScheme.surfaceContainer,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(borderRadius),
                           ),
-                          padding: EdgeInsets.all(5.0),
-                          child: Text("№${widget.place}"),
-                        ),
-                        Ink(
-                          decoration: ShapeDecoration(
-                            shape: RoundedRectangleBorder(
+                          clipBehavior: Clip.antiAlias,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ClipRRect(
                               borderRadius: BorderRadius.circular(borderRadius),
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  Ink(
+                                    decoration: BoxDecoration(
+                                      image:
+                                          DecorationImage(image: widget.image),
+                                      borderRadius:
+                                          BorderRadius.circular(borderRadius),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: <Color>[
+                                            Colors.transparent,
+                                            Colors.black,
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondaryContainer,
+                                          borderRadius: BorderRadius.circular(
+                                              borderRadius),
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 5.0,
+                                          horizontal: 10.0,
+                                        ),
+                                        child: Text(
+                                          "${widget.label}: ${widget.votes}",
+                                          overflow: TextOverflow.fade,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                            color: _colorScheme.secondaryContainer,
                           ),
-                          padding: EdgeInsets.all(5.0),
-                          child: Text("${widget.votes}"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Colors.transparent,
-                            Colors.black,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(borderRadius),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 10.0,
-                        ),
-                        child: Text(
-                          widget.label,
-                          overflow: TextOverflow.fade,
                         ),
                       ),
                     ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+                  ],
+                )),
       );
 }
