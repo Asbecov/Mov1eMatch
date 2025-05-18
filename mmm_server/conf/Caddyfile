@@ -1,0 +1,3 @@
+moviematch.servehttp.com {
+    reverse_proxy mmm_serverpod:8080
+}
