@@ -1,3 +1,8 @@
 moviematch.servehttp.com {
+    reverse_proxy /images/* http://thumbs.dfs.ivi.ru {
+        header_up Host thumbs.dfs.ivi.ru
+        header_down Access-Control-Allow-Origin *
+    }
+
     reverse_proxy mmm_serverpod:8080
 }

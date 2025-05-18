@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mmm/common/constants/app_constants.dart';
 import 'package:mmm/common/constants/assets.dart';
 import 'package:mmm/common/constants/routing_constants.dart';
 import 'package:mmm/common/widgets/selectable_button.dart';
@@ -103,7 +104,7 @@ class _ResultsViewState extends State<ResultsView> {
     }
 
     final List<MapEntry<Film, int>> results = state.results.entries.toList()
-      ..sort((a, b) => a.value.compareTo(b.value));
+      ..sort((a, b) => b.value.compareTo(a.value));
     final List<Widget> children = [];
 
     for (int i = 0; i < results.length.clamp(0, 3); i++) {
@@ -114,7 +115,10 @@ class _ResultsViewState extends State<ResultsView> {
           child: Center(
             child: ResultsCard(
               image: entry.key.art != null
-                  ? NetworkImage(entry.key.art!)
+                  ? NetworkImage(entry.key.art!.replaceAll(
+                      originalImageServerUrl,
+                      imagesServerUrl,
+                    ))
                   : AssetImage(kUnknown),
               label: entry.key.title,
               place: i + 1,

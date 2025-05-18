@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
+import 'package:mmm/common/constants/app_constants.dart';
 
 import 'package:mmm/common/constants/assets.dart';
 import 'package:mmm/common/widgets/selectable_button.dart';
@@ -55,8 +56,10 @@ class _VotingViewState extends State<VotingView> {
                   child: VotingCard(
                     image: state.results.keys.elementAt(index).art != null
                         ? NetworkImage(
-                            state.results.keys.elementAt(index).art!,
-                          )
+                            state.results.keys.elementAt(index).art!.replaceAll(
+                                  originalImageServerUrl,
+                                  imagesServerUrl,
+                                ))
                         : AssetImage(kUnknown),
                     horizontalDrag: horizontalDrag,
                     label: state.results.keys.elementAt(index).title,

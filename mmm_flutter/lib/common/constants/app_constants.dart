@@ -12,3 +12,6 @@ const String serverUrl = String.fromEnvironment(
   "SERVER_URL",
   defaultValue: 'http://localhost:8080/',
 );
+
+const String imagesServerUrl = "${serverUrl}images/";
+const String originalImageServerUrl = "http://thumbs.dfs.ivi.ru/";
