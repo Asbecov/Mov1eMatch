@@ -12,5 +12,5 @@ void main() {
   usePathUrlStrategy();
   client = Client(serverUrl);
 
-  runApp(const movie_match());
+  runApp(const MovieMatch());
 }

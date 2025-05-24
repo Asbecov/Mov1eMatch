@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.movie.match.movie_match"
+    namespace = "com.movie.match.salute_handler_example"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.movie.match.movie_match"
+        applicationId = "com.movie.match.salute_handler_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

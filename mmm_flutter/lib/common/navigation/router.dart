@@ -14,8 +14,23 @@ import 'package:movie_match/features/session/views/session_view.dart';
 import 'package:movie_match/features/voting/domain/voting_bloc/bloc.dart';
 import 'package:movie_match/features/voting/views/voting_view.dart';
 import 'package:mmm_client/mmm_client.dart';
+import 'package:movie_match/main.dart';
 
-final GoRouter route = GoRouter(
+class SaluteNavigatorObserver extends NavigatorObserver {
+  @override
+  void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
+    if (topRoute.settings.name != null) {
+      final String routeName = topRoute.settings.name!;
+      saluteHandler?.setState(newState: routeName);
+      if (kDebugMode) {
+        print("SaluteHandler: $routeName");
+      }
+    }
+  }
+}
+
+final GoRouter router = GoRouter(
+  observers: [SaluteNavigatorObserver()],
   initialLocation: createRoute,
   onException: (context, state, router) =>
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
@@ -45,7 +60,7 @@ final GoRouter route = GoRouter(
       builder: (context, state) => BlocProvider<SessionBloc>(
         create: (context) => SessionBloc(),
         child: SessionView(
-          selection: state.extra as List<Film>? ?? <Film>[],
+          selection: (state.extra as List<Film>?) ?? <Film>[],
         ),
       ),
     ),
