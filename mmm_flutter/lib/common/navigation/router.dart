@@ -5,17 +5,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:go_router/go_router.dart';
 
-import 'package:mmm/common/constants/routing_constants.dart';
-import 'package:mmm/features/create/views/create_view.dart';
-import 'package:mmm/features/results/domain/results_bloc/bloc.dart';
-import 'package:mmm/features/results/views/results_view.dart';
-import 'package:mmm/features/session/domain/session_bloc/bloc.dart';
-import 'package:mmm/features/session/views/session_view.dart';
-import 'package:mmm/features/voting/domain/voting_bloc/bloc.dart';
-import 'package:mmm/features/voting/views/voting_view.dart';
+import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/features/create/views/create_view.dart';
+import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
+import 'package:movie_match/features/results/views/results_view.dart';
+import 'package:movie_match/features/session/domain/session_bloc/bloc.dart';
+import 'package:movie_match/features/session/views/session_view.dart';
+import 'package:movie_match/features/voting/domain/voting_bloc/bloc.dart';
+import 'package:movie_match/features/voting/views/voting_view.dart';
 import 'package:mmm_client/mmm_client.dart';
+import 'package:movie_match/main.dart';
 
-final GoRouter route = GoRouter(
+class SaluteNavigatorObserver extends NavigatorObserver {
+  @override
+  void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
+    if (topRoute.settings.name != null) {
+      final String routeName = topRoute.settings.name!;
+      saluteHandler?.setState(newState: routeName);
+      if (kDebugMode) {
+        print("SaluteHandler: $routeName");
+      }
+    }
+  }
+}
+
+final GoRouter router = GoRouter(
+  observers: [SaluteNavigatorObserver()],
   initialLocation: createRoute,
   onException: (context, state, router) =>
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
@@ -45,7 +60,7 @@ final GoRouter route = GoRouter(
       builder: (context, state) => BlocProvider<SessionBloc>(
         create: (context) => SessionBloc(),
         child: SessionView(
-          selection: state.extra as List<Film>? ?? <Film>[],
+          selection: (state.extra as List<Film>?) ?? <Film>[],
         ),
       ),
     ),

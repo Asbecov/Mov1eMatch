@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:mmm_client/mmm_client.dart';
+import 'package:movie_match/common/models/salute/models.dart';
+import 'package:movie_match/main.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -16,6 +20,26 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<AddEntryEvent>(_handleAddEntryEvent);
     on<AddAllEntriesEvent>(_handleAddAllEntriesEvent);
     on<RemoveEntryEvent>(_handleRemoveEntryEvent);
+
+    _streamSubscription = saluteHandler?.eventStream.listen(
+      _eventStreamListener,
+    );
+  }
+
+  StreamSubscription? _streamSubscription;
+
+  void _eventStreamListener(String data) {
+    final BaseCommand command = BaseCommand.fromJson(jsonDecode(data));
+
+    if (command is AddFilmCommand) {
+      add(AddEntryEvent(entry: Film(title: command.film, genres: [])));
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    return super.close();
   }
 
   void _handleAddEntryEvent(

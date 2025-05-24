@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:mmm/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
 
-import 'package:mmm/common/constants/assets.dart';
-import 'package:mmm/common/widgets/selectable_button.dart';
-import 'package:mmm/features/voting/domain/voting_bloc/bloc.dart';
-import 'package:mmm/features/voting/widget/voting_card.dart';
+import 'package:movie_match/common/constants/assets.dart';
+import 'package:movie_match/common/widgets/selectable_button.dart';
+import 'package:movie_match/features/voting/domain/voting_bloc/bloc.dart';
+import 'package:movie_match/features/voting/widget/voting_card.dart';
 
 import 'package:mmm_client/mmm_client.dart';
 
@@ -42,7 +42,7 @@ class _VotingViewState extends State<VotingView> {
       return Column(
         children: [
           Text(
-            "Смахните налево если вам нравится фильм\nи направо если не нравится",
+            "Смахните направо если вам нравится фильм\nи налево если не нравится",
             textAlign: TextAlign.center,
           ),
           Expanded(
@@ -61,7 +61,7 @@ class _VotingViewState extends State<VotingView> {
                                   imagesServerUrl,
                                 ))
                         : AssetImage(kUnknown),
-                    horizontalDrag: horizontalDrag,
+                    horizontalDrag: -1 * horizontalDrag,
                     label: state.results.keys.elementAt(index).title,
                   ),
                 ),
@@ -69,7 +69,7 @@ class _VotingViewState extends State<VotingView> {
                   context.read<VotingBloc>().add(
                         VotingSubmitedEvent(
                           film: state.results.keys.elementAt(previousIndex),
-                          vote: direction == CardSwiperDirection.left
+                          vote: direction == CardSwiperDirection.right
                               ? true
                               : false,
                         ),

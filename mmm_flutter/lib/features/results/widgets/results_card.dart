@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:mmm/common/constants/app_constants.dart';
-import 'package:mmm/common/constants/assets.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/assets.dart';
 
 class ResultsCard extends StatefulWidget {
   const ResultsCard({

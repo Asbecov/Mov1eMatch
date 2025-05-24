@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mmm/main.dart';
+import 'package:movie_match/main.dart';
 import 'package:mmm_client/mmm_client.dart';
 
 part 'state.dart';

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mmm/common/constants/app_constants.dart';
-import 'package:mmm/common/constants/assets.dart';
-import 'package:mmm/common/constants/routing_constants.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/assets.dart';
+import 'package:movie_match/common/constants/routing_constants.dart';
 
-import 'package:mmm/features/create/domain/create_bloc/bloc.dart';
-import 'package:mmm/features/create/widgets/search_modal_sheet.dart';
+import 'package:movie_match/features/create/domain/create_bloc/bloc.dart';
+import 'package:movie_match/features/create/widgets/search_modal_sheet.dart';
 
-import 'package:mmm/common/widgets/film_card.dart';
-import 'package:mmm/common/widgets/selectable_button.dart';
+import 'package:movie_match/common/widgets/film_card.dart';
+import 'package:movie_match/common/widgets/selectable_button.dart';
 
 class CreateView extends StatefulWidget {
   const CreateView({super.key});

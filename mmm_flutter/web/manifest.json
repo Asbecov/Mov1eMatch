@@ -1,6 +1,6 @@
 {
-    "name": "mmm",
-    "short_name": "mmm",
+    "name": "movie_match",
+    "short_name": "movie_match",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

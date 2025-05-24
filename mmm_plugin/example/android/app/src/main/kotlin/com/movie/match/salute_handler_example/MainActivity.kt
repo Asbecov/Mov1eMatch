@@ -1,4 +1,4 @@
-package com.example.mmm
+package com.movie.match.salute_handler_example
 
 import io.flutter.embedding.android.FlutterActivity
 

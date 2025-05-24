@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mmm/common/constants/app_constants.dart';
+import 'package:movie_match/common/constants/app_constants.dart';
 
 class VotingCard extends StatefulWidget {
   const VotingCard({
