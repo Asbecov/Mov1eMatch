@@ -35,7 +35,6 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_card_swiper: ^7.0.2
   flutter_confetti: ^0.5.1
-  build_runner: ^2.4.15
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +42,23 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
   json_serializable: ^6.9.5
+  flutter_launcher_icons: ^0.14.3
+  build_runner: ^2.4.15
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon.png"
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "0xFF723523"
+    theme_color: "0xFF35211C"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+  macos:
+    generate: false
 
 flutter:
   uses-material-design: true

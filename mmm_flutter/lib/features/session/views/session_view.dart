@@ -8,30 +8,12 @@ import 'package:movie_match/common/constants/assets.dart';
 import 'package:movie_match/common/constants/routing_constants.dart';
 import 'package:movie_match/common/widgets/selectable_text_button.dart';
 import 'package:movie_match/features/session/domain/session_bloc/bloc.dart';
-import 'package:mmm_client/mmm_client.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class SessionView extends StatefulWidget {
+class SessionView extends StatelessWidget {
   const SessionView({
     super.key,
-    required this.selection,
   });
-
-  final List<Film> selection;
-
-  @override
-  State<SessionView> createState() => _SessionViewState();
-}
-
-class _SessionViewState extends State<SessionView> {
-  @override
-  void initState() {
-    context
-        .read<SessionBloc>()
-        .add(PromptedSessionEvent(pool: widget.selection));
-
-    super.initState();
-  }
 
   void _onCloseSessionTap(BuildContext context) {
     final String? id = context.read<SessionBloc>().state.sessionId;
