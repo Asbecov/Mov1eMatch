@@ -65,10 +65,14 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
     })
 
     val context : Context = flutterPluginBinding.applicationContext
+    
     messaging = MessagingFactory.create(appContext = context)
     appStateHolder = AppStateManagerFactory.createHolder(context = context)
 
-    messaging.addListener(messagingListener)
+    val version : Int? = messaging.getVersion();
+    if (version != null && version >= 1) {
+      messaging.addListener(messagingListener)
+    }
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
