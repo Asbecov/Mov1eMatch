@@ -1,0 +1,77 @@
+# .github/workflows/ci_cd.yml
+name: CI/CD Monorepo
+
+on:
+  push:
+    branches: [ master ]
+
+permissions:
+  contents: write     
+  pages: write        
+  id-token: write 
+
+jobs:
+  build-and-deploy-flutter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout monorepo
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Install dependencies
+        run: flutter pub get
+        working-directory: mmm_flutter/
+
+      - name: Build Flutter Web
+        run: | 
+          cd mmm_flutter/
+          flutter build web --wasm -t lib/main_web.dart --base-href="/Mov1eMatch/" --release --dart-define=FRONTEND_URL=${{ secrets.FRONTEND_URL }} --dart-define=SERVER_URL=${{ secrets.SERVER_URL }}
+
+      - name: Copy 404.html to build folder
+        run: |
+          cd mmm_flutter/build/web
+          cp index.html 404.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: mmm_flutter/build/web
+          force_orphan: true
+          user_name: 'github-ci[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Publish to gh-pages'
+
+  deploy-server:
+    needs: build-and-deploy-flutter
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./mmm_server
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Deploy to VPS
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            cd ./Mov1eMatch
+            git pull origin master
+            cd ./mmm_server
+
+            docker compose down
+            docker compose up --build -d
+          EOF
+
