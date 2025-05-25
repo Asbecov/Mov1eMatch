@@ -48,7 +48,10 @@ class _VotingCardState extends State<VotingCard> {
                         children: [
                           Ink(
                             decoration: BoxDecoration(
-                              image: DecorationImage(image: widget.image),
+                              image: DecorationImage(
+                                image: widget.image,
+                                fit: BoxFit.fill,
+                              ),
                               borderRadius: BorderRadius.circular(borderRadius),
                             ),
                           ),

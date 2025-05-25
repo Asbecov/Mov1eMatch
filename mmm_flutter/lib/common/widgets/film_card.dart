@@ -85,7 +85,10 @@ class _FilmCardState extends State<FilmCard> {
               children: [
                 Ink(
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: widget.image),
+                    image: DecorationImage(
+                      image: widget.image,
+                      fit: BoxFit.fill,
+                    ),
                     borderRadius: BorderRadius.circular(borderRadius),
                   ),
                 ),

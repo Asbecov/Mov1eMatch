@@ -70,8 +70,10 @@ class _ResultsCardState extends State<ResultsCard> {
                                 children: [
                                   Ink(
                                     decoration: BoxDecoration(
-                                      image:
-                                          DecorationImage(image: widget.image),
+                                      image: DecorationImage(
+                                        image: widget.image,
+                                        fit: BoxFit.fill,
+                                      ),
                                       borderRadius:
                                           BorderRadius.circular(borderRadius),
                                     ),

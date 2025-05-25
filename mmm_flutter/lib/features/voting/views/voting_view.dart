@@ -94,9 +94,9 @@ class _VotingViewState extends State<VotingView> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SelectableButton(
-                  icon: Icons.favorite,
-                  onTap: () => _controller.swipe(CardSwiperDirection.left),
-                  tooltip: "Голос за",
+                  icon: Icons.clear,
+                  onTap: () => _controller.swipe(CardSwiperDirection.right),
+                  tooltip: "Голос против",
                 ),
                 SelectableButton(
                   icon: Icons.undo,
@@ -104,9 +104,9 @@ class _VotingViewState extends State<VotingView> {
                   tooltip: "Отмена",
                 ),
                 SelectableButton(
-                  icon: Icons.clear,
-                  onTap: () => _controller.swipe(CardSwiperDirection.right),
-                  tooltip: "Голос против",
+                  icon: Icons.favorite,
+                  onTap: () => _controller.swipe(CardSwiperDirection.left),
+                  tooltip: "Голос за",
                 ),
               ],
             ),

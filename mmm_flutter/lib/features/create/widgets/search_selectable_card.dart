@@ -77,7 +77,10 @@ class _SearchCardState extends State<SearchSelectableCard> {
                       aspectRatio: 2 / 3,
                       child: Ink(
                         decoration: BoxDecoration(
-                          image: DecorationImage(image: widget.image),
+                          image: DecorationImage(
+                            image: widget.image,
+                            fit: BoxFit.fill,
+                          ),
                           borderRadius: BorderRadius.circular(borderRadius),
                         ),
                       ),
