@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
 import 'package:movie_match/common/constants/app_constants.dart';
 import 'package:movie_match/common/constants/assets.dart';
 import 'package:movie_match/common/constants/routing_constants.dart';
@@ -50,6 +51,58 @@ class _CreateViewState extends State<CreateView> {
         builder: (context) => SearchModalSheet(),
       );
 
+  Widget _builder(BuildContext context, CreateState state) =>
+      state.selection.isNotEmpty
+          ? CustomScrollView(
+              slivers: <Widget>[
+                SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: _crossAxisCount,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 2 / 3,
+                  ),
+                  itemBuilder: (context, index) => FilmCard(
+                    key: ValueKey(index),
+                    image: state.selection[index].art != null
+                        ? NetworkImage(state.selection[index].art!.replaceAll(
+                            originalImageServerUrl,
+                            imagesServerUrl,
+                          ))
+                        : AssetImage(kUnknown),
+                    label: state.selection[index].title,
+                    onDelete: (id) => context.read<CreateBloc>().add(
+                          RemoveEntryEvent(index: (id as ValueKey<int>).value),
+                        ),
+                  ),
+                  itemCount: state.selection.length,
+                ),
+              ],
+            )
+          : Center(
+              child: Text(
+                'Кажется тут ничего нету,\nпопробуйте добавить фильмы через функцию поиска!',
+                textAlign: TextAlign.center,
+              ),
+            );
+
+  void _listener(BuildContext context, CreateState state) {
+    if (state is CreateErrorState) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            kDebugMode
+                ? '${state.error} ${state.stackTrace}'
+                : "Попробуйте позже",
+          ),
+          backgroundColor: Theme.of(context).colorScheme.error,
+          showCloseIcon: true,
+          closeIconColor: Theme.of(context).colorScheme.onError,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
@@ -84,58 +137,8 @@ class _CreateViewState extends State<CreateView> {
           ],
         ),
         body: BlocConsumer<CreateBloc, CreateState>(
-          listener: (context, state) {
-            if (state is CreateErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    kDebugMode
-                        ? '${state.error} ${state.stackTrace}'
-                        : "Попробуйте позже",
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.error,
-                  showCloseIcon: true,
-                  closeIconColor: Theme.of(context).colorScheme.onError,
-                ),
-              );
-            }
-          },
-          buildWhen: (previous, current) => current is! CreateErrorState,
-          builder: (context, state) => state.selection.isNotEmpty
-              ? CustomScrollView(
-                  slivers: <Widget>[
-                    SliverGrid.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: _crossAxisCount,
-                        mainAxisSpacing: 10,
-                        crossAxisSpacing: 10,
-                        childAspectRatio: 2 / 3,
-                      ),
-                      itemBuilder: (context, index) => FilmCard(
-                        key: ValueKey(index),
-                        image: state.selection[index].art != null
-                            ? NetworkImage(
-                                state.selection[index].art!.replaceAll(
-                                originalImageServerUrl,
-                                imagesServerUrl,
-                              ))
-                            : AssetImage(kUnknown),
-                        label: state.selection[index].title,
-                        onDelete: (id) => context.read<CreateBloc>().add(
-                              RemoveEntryEvent(
-                                  index: (id as ValueKey<int>).value),
-                            ),
-                      ),
-                      itemCount: state.selection.length,
-                    ),
-                  ],
-                )
-              : Center(
-                  child: Text(
-                    'Кажется тут ничего нету,\nпопробуйте добавить фильмы через функцию поиска!',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+          listener: _listener,
+          builder: _builder,
         ),
       );
 }

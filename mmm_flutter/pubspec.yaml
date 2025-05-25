@@ -1,5 +1,5 @@
 name: movie_match
-description: "Choose a movie for the evening!"
+description: "Pick your favourite movies for the evening"
 
 publish_to: "none"
 
@@ -35,7 +35,7 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_card_swiper: ^7.0.2
   flutter_confetti: ^0.5.1
-  build_runner: ^2.4.15
+  flutter_native_splash: ^2.4.6
 
 dev_dependencies:
   flutter_test:
@@ -43,6 +43,32 @@ dev_dependencies:
 
   flutter_lints: ^5.0.0
   json_serializable: ^6.9.5
+  flutter_launcher_icons: ^0.14.3
+  build_runner: ^2.4.15
+
+flutter_launcher_icons:
+  android: true
+  ios: false
+  image_path: "assets/icon.png"
+  web:
+    generate: true
+    image_path: "assets/icon.png"
+    background_color: "0xFF723523"
+    theme_color: "0xFF35211C"
+  windows:
+    generate: true
+    image_path: "assets/icon.png"
+  macos:
+    generate: false
+
+flutter_native_splash:
+  color: "#1A110F"
+  image: assets/icon_transparent.png
+  android_12:
+    image: assets/icon_transparent.png
+    color: "#1A110F"
+    icon_background_color: "#723523"
+  ios: false
 
 flutter:
   uses-material-design: true

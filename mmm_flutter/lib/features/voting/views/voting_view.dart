@@ -42,7 +42,7 @@ class _VotingViewState extends State<VotingView> {
       return Column(
         children: [
           Text(
-            "Смахните налево если вам нравится фильм\nи направо если не нравится",
+            "Смахните направо если вам нравится фильм\nи налево если не нравится",
             textAlign: TextAlign.center,
           ),
           Expanded(
@@ -61,7 +61,7 @@ class _VotingViewState extends State<VotingView> {
                                   imagesServerUrl,
                                 ))
                         : AssetImage(kUnknown),
-                    horizontalDrag: horizontalDrag,
+                    horizontalDrag: -1 * horizontalDrag,
                     label: state.results.keys.elementAt(index).title,
                   ),
                 ),
@@ -69,7 +69,7 @@ class _VotingViewState extends State<VotingView> {
                   context.read<VotingBloc>().add(
                         VotingSubmitedEvent(
                           film: state.results.keys.elementAt(previousIndex),
-                          vote: direction == CardSwiperDirection.left
+                          vote: direction == CardSwiperDirection.right
                               ? true
                               : false,
                         ),

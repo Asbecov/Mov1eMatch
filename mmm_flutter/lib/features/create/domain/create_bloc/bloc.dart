@@ -37,8 +37,9 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
   }
 
   @override
-  Future<void> close() {
-    _streamSubscription?.cancel();
+  Future<void> close() async {
+    await _streamSubscription?.cancel();
+
     return super.close();
   }
 

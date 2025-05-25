@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/common/navigation/salute/bloc/bloc.dart';
 import 'package:movie_match/features/create/views/create_view.dart';
 import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
 import 'package:movie_match/features/results/views/results_view.dart';
@@ -52,38 +53,86 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: createRoute,
       name: createName,
-      builder: (context, state) => CreateView(),
+      builder: (context, state) => BlocProvider<SaluteNavigationBloc>(
+        create: (context) => SaluteNavigationBloc(),
+        child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
+          listener: SaluteNavigationBloc.blocListener,
+          child: const CreateView(),
+        ),
+      ),
     ),
     GoRoute(
       path: sessionRoute,
       name: sessionName,
-      builder: (context, state) => BlocProvider<SessionBloc>(
-        create: (context) => SessionBloc(),
-        child: SessionView(
-          selection: (state.extra as List<Film>?) ?? <Film>[],
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider<SessionBloc>(
+            create: (context) {
+              final SessionBloc bloc = SessionBloc();
+
+              if (state.extra is List<Film>) {
+                bloc.add(
+                  PromptedSessionEvent(pool: state.extra as List<Film>),
+                );
+              }
+
+              return bloc;
+            },
+          ),
+          BlocProvider<SaluteNavigationBloc>(
+            create: (context) => SaluteNavigationBloc(),
+          )
+        ],
+        child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
+          listener: SaluteNavigationBloc.blocListener,
+          child: const SessionView(),
         ),
       ),
     ),
     GoRoute(
       path: resultsRoute,
       name: resultsName,
-      builder: (context, state) => BlocProvider<ResultsBloc>(
-        create: (context) => ResultsBloc()
-          ..add(ResultsPromptedEvent(
-            sessionId: state.pathParameters[resultsParamName]!,
-          )),
-        child: const ResultsView(),
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider<ResultsBloc>(
+            create: (context) => ResultsBloc()
+              ..add(
+                ResultsPromptedEvent(
+                  sessionId: state.pathParameters[resultsParamName]!,
+                ),
+              ),
+          ),
+          BlocProvider<SaluteNavigationBloc>(
+            create: (context) => SaluteNavigationBloc(),
+          ),
+        ],
+        child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
+          listener: SaluteNavigationBloc.blocListener,
+          child: const ResultsView(),
+        ),
       ),
     ),
     GoRoute(
       path: votingRoute,
       name: votingName,
-      builder: (context, state) => BlocProvider<VotingBloc>(
-        create: (context) => VotingBloc()
-          ..add(VotingInitEvent(
-            sessionId: state.pathParameters[votingParamName]!,
-          )),
-        child: VotingView(),
+      builder: (context, state) => MultiBlocProvider(
+        providers: [
+          BlocProvider<VotingBloc>(
+            create: (context) => VotingBloc()
+              ..add(
+                VotingInitEvent(
+                  sessionId: state.pathParameters[votingParamName]!,
+                ),
+              ),
+          ),
+          BlocProvider<SaluteNavigationBloc>(
+            create: (context) => SaluteNavigationBloc(),
+          ),
+        ],
+        child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
+          listener: SaluteNavigationBloc.blocListener,
+          child: const VotingView(),
+        ),
       ),
     ),
   ],

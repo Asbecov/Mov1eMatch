@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:movie_match/common/constants/app_constants.dart';
 import 'package:movie_match/common/models/salute/models.dart';
 import 'package:movie_match/common/navigation/router.dart';
