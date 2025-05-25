@@ -95,7 +95,7 @@ class _VotingViewState extends State<VotingView> {
               children: <Widget>[
                 SelectableButton(
                   icon: Icons.clear,
-                  onTap: () => _controller.swipe(CardSwiperDirection.right),
+                  onTap: () => _controller.swipe(CardSwiperDirection.left),
                   tooltip: "Голос против",
                 ),
                 SelectableButton(
@@ -105,7 +105,7 @@ class _VotingViewState extends State<VotingView> {
                 ),
                 SelectableButton(
                   icon: Icons.favorite,
-                  onTap: () => _controller.swipe(CardSwiperDirection.left),
+                  onTap: () => _controller.swipe(CardSwiperDirection.right),
                   tooltip: "Голос за",
                 ),
               ],
