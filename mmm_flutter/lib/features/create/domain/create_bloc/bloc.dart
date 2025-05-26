@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mmm_client/mmm_client.dart';
 import 'package:movie_match/common/models/salute/models.dart';
 import 'package:movie_match/main.dart';
@@ -21,18 +22,21 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
     on<AddAllEntriesEvent>(_handleAddAllEntriesEvent);
     on<RemoveEntryEvent>(_handleRemoveEntryEvent);
 
-    _streamSubscription = saluteHandler?.eventStream.listen(
-      _eventStreamListener,
-    );
+    _streamSubscription =
+        saluteHandler?.eventStream.listen(_eventStreamListener);
   }
 
   StreamSubscription? _streamSubscription;
 
   void _eventStreamListener(String data) {
-    final BaseCommand command = BaseCommand.fromJson(jsonDecode(data));
+    try {
+      final BaseCommand command = BaseCommand.fromJson(jsonDecode(data));
 
-    if (command is AddFilmCommand) {
-      add(AddEntryEvent(entry: Film(title: command.film, genres: [])));
+      if (command is AddFilmCommand) {
+        add(AddEntryEvent(entry: Film(title: command.film ?? "", genres: [])));
+      }
+    } catch (e) {
+      if (kDebugMode) print("error: $e");
     }
   }
 

@@ -25,6 +25,17 @@ class NavigationCommand {
   Map<String, dynamic> toJson() => _$NavigationCommandToJson(this);
 }
 
+@JsonSerializable()
+class AppState {
+  final String routingState;
+
+  AppState({required this.routingState});
+
+  factory AppState.fromJson(Map<String, dynamic> json) =>
+      _$AppStateFromJson(json);
+  Map<String, dynamic> toJson() => _$AppStateToJson(this);
+}
+
 abstract class BaseCommand {
   factory BaseCommand.fromJson(Map<String, dynamic> json) {
     switch (json['command']) {
@@ -44,7 +55,7 @@ abstract class BaseCommand {
 
 @JsonSerializable()
 class AddFilmCommand implements BaseCommand {
-  final String film;
+  final String? film;
 
   AddFilmCommand(this.film);
 

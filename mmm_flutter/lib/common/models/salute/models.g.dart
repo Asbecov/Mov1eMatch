@@ -23,9 +23,17 @@ const _$NavCommandEnumMap = {
   NavCommand.right: 'RIGHT',
 };
 
+AppState _$AppStateFromJson(Map<String, dynamic> json) => AppState(
+      routingState: json['routingState'] as String,
+    );
+
+Map<String, dynamic> _$AppStateToJson(AppState instance) => <String, dynamic>{
+      'routingState': instance.routingState,
+    };
+
 AddFilmCommand _$AddFilmCommandFromJson(Map<String, dynamic> json) =>
     AddFilmCommand(
-      json['film'] as String,
+      json['film'] as String?,
     );
 
 Map<String, dynamic> _$AddFilmCommandToJson(AddFilmCommand instance) =>

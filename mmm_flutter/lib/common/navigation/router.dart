@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -6,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/common/models/salute/models.dart';
 import 'package:movie_match/common/navigation/salute/bloc/bloc.dart';
 import 'package:movie_match/features/create/views/create_view.dart';
 import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
@@ -21,11 +24,9 @@ class SaluteNavigatorObserver extends NavigatorObserver {
   @override
   void didChangeTop(Route<dynamic> topRoute, Route<dynamic>? previousTopRoute) {
     if (topRoute.settings.name != null) {
-      final String routeName = topRoute.settings.name!;
-      saluteHandler?.setState(newState: routeName);
-      if (kDebugMode) {
-        print("SaluteHandler: $routeName");
-      }
+      final AppState state = AppState(routingState: topRoute.settings.name!);
+      saluteHandler?.setState(newState: jsonEncode(state.toJson()));
+      if (kDebugMode) print("SaluteHandler: ${state.routingState}");
     }
   }
 }
@@ -50,7 +51,9 @@ final GoRouter router = GoRouter(
       path: createRoute,
       name: createName,
       builder: (context, state) => BlocProvider<SaluteNavigationBloc>(
-        create: (context) => SaluteNavigationBloc(),
+        create: (context) {
+          return SaluteNavigationBloc();
+        },
         child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
           listener: SaluteNavigationBloc.blocListener,
           child: const CreateView(),

@@ -11,6 +11,8 @@ import io.flutter.plugin.common.EventChannel.EventSink
 import io.flutter.plugin.common.EventChannel.StreamHandler
 import ru.sberdevices.services.appstate.*
 import ru.sberdevices.messaging.*
+import android.os.Handler
+import android.os.Looper
 
 /** SaluteHandlerPlugin */
 class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
@@ -26,7 +28,10 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
 
   private val messagingListener = object : Messaging.Listener {
     override fun onMessage(messageId: MessageId, payload: Payload) {
-      eventSink?.success(payload.data)
+      val mainHandler = Handler(Looper.getMainLooper())
+      mainHandler.post {
+        eventSink?.success(payload.data)
+      }
     }
 
     override fun onNavigationCommand(payload: Payload) {

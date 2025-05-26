@@ -63,28 +63,32 @@ class ResultsView extends StatelessWidget {
 
         int count = ((1 - progress / total) * 50).toInt();
 
-        Confetti.launch(
-          context,
-          options: ConfettiOptions(
-            particleCount: count,
-            startVelocity: 30,
-            spread: 360,
-            ticks: 60,
-            x: randomInRange(0.1, 0.3),
-            y: Random().nextDouble() - 0.2,
-          ),
-        );
-        Confetti.launch(
-          context,
-          options: ConfettiOptions(
-            particleCount: count,
-            startVelocity: 30,
-            spread: 360,
-            ticks: 60,
-            x: randomInRange(0.7, 0.9),
-            y: Random().nextDouble() - 0.2,
-          ),
-        );
+        try {
+          Confetti.launch(
+            context,
+            options: ConfettiOptions(
+              particleCount: count,
+              startVelocity: 30,
+              spread: 360,
+              ticks: 60,
+              x: randomInRange(0.1, 0.3),
+              y: Random().nextDouble() - 0.2,
+            ),
+          );
+          Confetti.launch(
+            context,
+            options: ConfettiOptions(
+              particleCount: count,
+              startVelocity: 30,
+              spread: 360,
+              ticks: 60,
+              x: randomInRange(0.7, 0.9),
+              y: Random().nextDouble() - 0.2,
+            ),
+          );
+        } catch (e) {
+          if (kDebugMode) print("error $e");
+        }
       });
     }
   }

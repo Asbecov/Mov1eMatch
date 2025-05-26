@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -61,17 +62,21 @@ class _NavigationState extends State<SaluteNavigation> {
   }
 
   void _saluteHandlerListener(String data) {
-    final NavigationCommand command = NavigationCommand.fromJson(
-      jsonDecode(data),
-    );
-    final FocusManager manager = FocusManager.instance;
+    try {
+      final NavigationCommand command = NavigationCommand.fromJson(
+        jsonDecode(data),
+      );
+      final FocusManager manager = FocusManager.instance;
 
-    manager.primaryFocus?.focusInDirection(switch (command.command) {
-      NavCommand.down => TraversalDirection.down,
-      NavCommand.left => TraversalDirection.left,
-      NavCommand.up => TraversalDirection.up,
-      NavCommand.right => TraversalDirection.right,
-    });
+      manager.primaryFocus?.focusInDirection(switch (command.command) {
+        NavCommand.down => TraversalDirection.down,
+        NavCommand.left => TraversalDirection.left,
+        NavCommand.up => TraversalDirection.up,
+        NavCommand.right => TraversalDirection.right,
+      });
+    } catch (e) {
+      if (kDebugMode) print("error: $e");
+    }
   }
 
   @override

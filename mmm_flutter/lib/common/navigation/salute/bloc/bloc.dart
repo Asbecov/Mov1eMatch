@@ -45,7 +45,9 @@ class SaluteNavigationBloc
       final BaseCommand command = BaseCommand.fromJson(jsonDecode(data));
 
       add(RecievedCommandSaluteNavigationEvent(command: command));
-    } finally {}
+    } catch (e) {
+      if (kDebugMode) print("error: $e");
+    }
   }
 
   static void blocListener(BuildContext context, SaluteNavigationState state) {

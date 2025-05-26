@@ -11,6 +11,7 @@ late final Client client;
 SaluteHandler? saluteHandler;
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   client = Client(serverUrl);
   if (Platform.isAndroid) saluteHandler = SaluteHandler();
 

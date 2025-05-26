@@ -15,16 +15,23 @@ class MethodChannelSaluteHandler extends SaluteHandlerPlatform {
     'salute_navigation_event_handler',
   );
 
-  @override
-  Stream<String> get eventStream =>
-      eventChannel.receiveBroadcastStream().map((event) => event.toString());
+  late final Stream<String> _eventStream = eventChannel
+      .receiveBroadcastStream()
+      .map((event) => event.toString());
 
-  @override
-  Stream<String> get navigationEventStream => navigationEventChannel
+  late final Stream<String> _navigationEventStream = navigationEventChannel
       .receiveBroadcastStream()
       .map((event) => event.toString());
 
   @override
-  Future setState({required String newState}) async => methodChannel
-      .invokeMethod('setState', <String, dynamic>{"newState": newState});
+  Stream<String> get eventStream => _eventStream;
+
+  @override
+  Stream<String> get navigationEventStream => _navigationEventStream;
+
+  @override
+  Future<String?> setState({required String newState}) async =>
+      methodChannel.invokeMethod<String>('setState', <String, dynamic>{
+        "newState": newState,
+      });
 }
