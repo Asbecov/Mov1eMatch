@@ -3,7 +3,7 @@ description: "Pick your favourite movies for the evening"
 
 publish_to: "none"
 
-version: 2.0.0+1
+version: 1.0.0+6
 
 platforms:
   web:

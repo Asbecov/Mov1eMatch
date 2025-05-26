@@ -43,10 +43,6 @@ final GoRouter router = GoRouter(
           if (kDebugMode) Text(state.error?.message ?? ""),
         ],
       ),
-      action: SnackBarAction(
-        label: "Ok",
-        onPressed: () {},
-      ),
     ),
   ),
   routes: <RouteBase>[

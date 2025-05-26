@@ -2,21 +2,25 @@ import 'package:flutter/material.dart';
 
 import 'package:movie_match/common/constants/app_constants.dart';
 
-class movie_matcherTextField extends StatefulWidget {
-  const movie_matcherTextField({
+class SelectableTextField extends StatefulWidget {
+  const SelectableTextField({
     super.key,
+    required this.label,
+    required this.labelIcon,
     required this.hint,
     required this.textEditingController,
   });
 
+  final String label;
+  final IconData labelIcon;
   final String hint;
   final TextEditingController textEditingController;
 
   @override
-  State<movie_matcherTextField> createState() => _movie_matcherTextFieldState();
+  State<SelectableTextField> createState() => SelectableTextFieldState();
 }
 
-class _movie_matcherTextFieldState extends State<movie_matcherTextField> {
+class SelectableTextFieldState extends State<SelectableTextField> {
   late final FocusNode _focusNode;
   late ColorScheme colorScheme;
 
@@ -29,6 +33,9 @@ class _movie_matcherTextFieldState extends State<movie_matcherTextField> {
 
   @override
   void didChangeDependencies() {
+    final EdgeInsets viewInsets = MediaQuery.of(context).viewInsets;
+    if (viewInsets.bottom == 0.0 && _focusNode.hasFocus) _focusNode.nextFocus();
+
     colorScheme = Theme.of(context).colorScheme;
 
     super.didChangeDependencies();
@@ -54,7 +61,7 @@ class _movie_matcherTextFieldState extends State<movie_matcherTextField> {
               side: _focusNode.hasFocus
                   ? BorderSide(color: colorScheme.outline, width: rimSize)
                   : BorderSide.none,
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadius.circular(borderRadius * 2),
             ),
             child: LayoutBuilder(
                 builder: (context, constraints) => TextField(
@@ -68,6 +75,21 @@ class _movie_matcherTextFieldState extends State<movie_matcherTextField> {
                         contentPadding: EdgeInsets.symmetric(
                           horizontal: 10,
                           vertical: constraints.maxHeight / 2,
+                        ),
+                        label: Row(
+                          spacing: 5.0,
+                          children: <Widget>[
+                            Icon(
+                              widget.labelIcon,
+                              color: Colors.white.withAlpha(128),
+                            ),
+                            Text(
+                              widget.label,
+                              style: TextStyle(
+                                color: Colors.white.withAlpha(128),
+                              ),
+                            ),
+                          ],
                         ),
                         hintText: widget.hint,
                         border: OutlineInputBorder(borderSide: BorderSide.none),

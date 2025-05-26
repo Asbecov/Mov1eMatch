@@ -69,7 +69,9 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
             child: Container(
               height: 60.0,
               margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: movie_matcherTextField(
+              child: SelectableTextField(
+                labelIcon: Icons.search,
+                label: "Поиск фильмов",
                 hint: "Начните поиск фильмов",
                 textEditingController: _textEditingController!,
               ),
@@ -111,6 +113,8 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
                     );
                   }
                   return SearchSelectableCard(
+                    top: index == 1,
+                    bottom: index == state.results.length,
                     key: ValueKey(index - 1),
                     onTap: (key) =>
                         context.read<CreateBloc>().add(AddEntryEvent(

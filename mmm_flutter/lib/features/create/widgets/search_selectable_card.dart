@@ -10,6 +10,8 @@ class SearchSelectableCard extends StatefulWidget {
     required this.description,
     required this.genres,
     required this.image,
+    this.top = false,
+    this.bottom = false,
   });
 
   final void Function(Key) onTap;
@@ -17,6 +19,8 @@ class SearchSelectableCard extends StatefulWidget {
   final String description;
   final List<String> genres;
   final ImageProvider image;
+  final bool top;
+  final bool bottom;
 
   @override
   State<SearchSelectableCard> createState() => _SearchCardState();
@@ -48,11 +52,38 @@ class _SearchCardState extends State<SearchSelectableCard> {
     super.dispose();
   }
 
+  BorderRadius get _effectiveBorderRadius =>
+      switch ((widget.top, widget.bottom)) {
+        (true, true) => BorderRadius.circular(borderRadius),
+        (true, false) => BorderRadius.vertical(
+            top: Radius.circular(borderRadius),
+            bottom: Radius.circular(borderRadius / 2.5),
+          ),
+        (false, true) => BorderRadius.vertical(
+            top: Radius.circular(borderRadius / 2.5),
+            bottom: Radius.circular(borderRadius),
+          ),
+        (false, false) => BorderRadius.circular(borderRadius / 2.5),
+      };
+
+  final EdgeInsets _defaultMargin = EdgeInsets.only(
+    left: 10.0,
+    right: 10.0,
+    top: 5.0,
+  );
+
+  EdgeInsets get _effectiveMargin => switch ((widget.top, widget.bottom)) {
+        (true, true) => _defaultMargin.copyWith(top: 10.0, bottom: 10.0),
+        (true, false) => _defaultMargin.copyWith(top: 10.0),
+        (false, true) => _defaultMargin,
+        (false, false) => _defaultMargin,
+      };
+
   void _handleFocusChange() => setState(() {});
 
   @override
   Widget build(BuildContext context) => Container(
-        margin: EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
+        margin: _effectiveMargin,
         height: 240,
         child: Material(
           color: _colorScheme.surfaceContainer,
@@ -60,7 +91,7 @@ class _SearchCardState extends State<SearchSelectableCard> {
             side: _focusNode.hasFocus
                 ? BorderSide(color: _colorScheme.outline, width: rimSize)
                 : BorderSide.none,
-            borderRadius: BorderRadius.circular(borderRadius),
+            borderRadius: _effectiveBorderRadius,
           ),
           clipBehavior: Clip.antiAlias,
           child: InkWell(

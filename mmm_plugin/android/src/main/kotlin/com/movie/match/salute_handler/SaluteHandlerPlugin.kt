@@ -21,8 +21,8 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
   private var eventSink: EventSink? = null
   private var navigationEventSink: EventSink? = null
 
-  private lateinit var messaging : Messaging
-  private lateinit var appStateHolder : AppStateHolder
+  private var messaging : Messaging? = null
+  private var appStateHolder : AppStateHolder? = null
 
   private val messagingListener = object : Messaging.Listener {
     override fun onMessage(messageId: MessageId, payload: Payload) {
@@ -41,7 +41,7 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
   override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "salute_handler")
     eventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "salute_event_handler")
-    navigationEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "salute_navigation_handler")
+    navigationEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, "salute_navigation_event_handler")
 
     channel.setMethodCallHandler(this)
     eventChannel.setStreamHandler(object : StreamHandler {
@@ -65,20 +65,24 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
     })
 
     val context : Context = flutterPluginBinding.applicationContext
-    
-    messaging = MessagingFactory.create(appContext = context)
-    appStateHolder = AppStateManagerFactory.createHolder(context = context)
 
-    val version : Int? = messaging.getVersion();
+    if (messaging == null) {
+      messaging = MessagingFactory.create(appContext = context)
+    }
+    if (appStateHolder == null) {
+      appStateHolder = AppStateManagerFactory.createHolder(context = context)
+    }
+
+    val version : Int? = messaging?.getVersion()
     if (version != null && version >= 1) {
-      messaging.addListener(messagingListener)
+      messaging?.addListener(messagingListener)
     }
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
     if (call.method == "setState" && call.hasArgument("newState")) {
       val argument : String? = call.argument<String>("newState")
-      appStateHolder.setState(argument)
+      appStateHolder?.setState(argument)
 
       result.success("Set state to $argument")
     } else {
@@ -90,5 +94,10 @@ class SaluteHandlerPlugin: FlutterPlugin, MethodCallHandler {
     channel.setMethodCallHandler(null)
     eventChannel.setStreamHandler(null)
     navigationEventChannel.setStreamHandler(null)
+
+    appStateHolder?.dispose()
+    appStateHolder = null
+    messaging?.dispose()
+    messaging = null
   }
 }
