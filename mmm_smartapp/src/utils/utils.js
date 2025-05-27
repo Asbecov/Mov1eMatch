@@ -62,12 +62,23 @@ function formEndSessionCommand() {
     }
 }
 
-function formReturnCommand() {
+function formHelpCommand() {
     return {
         "command": {
             type: "smart_app_data",
             smart_app_data: {
-                command: "return_to_create"
+                command: "help"
+            }
+        }
+    }
+}
+
+function formReturnCreateCommand()  {
+    return {
+        "command": {
+            type: "smart_app_data",
+            smart_app_data: {
+                command: "return_create"
             }
         }
     }

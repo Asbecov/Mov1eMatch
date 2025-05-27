@@ -1,7 +1,8 @@
 require: utils/utils.js
 
-#patterns:
-#    $hello = (салют|привет|здравствуй*|здарова|добрый (день|вечер) | *start)
+patterns:
+    $hello = (салют|старт|привет|здравствуй*|здарова|добрый (день|вечер) | *start)
+    $AnyText = *
     
 theme: /
 
@@ -12,7 +13,7 @@ theme: /
             $response.replies.push({
                 type: 'raw',
                 body: {
-                    pronounceText: "Я не понимаю: {{$parseTree.text}}",
+                    pronounceText: "Извините, я вас не понимаю: попробуйте сказать помощь, чтобы узнать доступные команды",
                     items: [
                         {
                             command: {
@@ -31,6 +32,7 @@ theme: /
     state: runApp
         event!: runApp
         q!: * *start
+        q!: (запусти | вруби | открой) movie (меч | match | mage)
         script:
             $response.replies = $response.replies || [];
             $response.replies.push({
@@ -52,13 +54,12 @@ theme: /
             });
         
     state: addMovie
-        intent!: /addMovie
+        q!: (добавить|добавь|внеси|запиши|фильм|кино|кинокартина|картина)
+            [фильм/кино/кинокартину/картину] 
+            $AnyText::film
         script:
-            $jsapi.log("LOG of state")
-            $jsapi.log(JSON.stringify($request.rawRequest))
             var film = $parseTree._film
-            $jsapi.log(film)
-            var routingState = $request.rawRequest.payload.meta.current_app.state
+            var routingState = $request.rawRequest.payload.meta.current_app.state.routingState
             if (routingState == "create") {
                 reply( {
                         "pronounceText": film + " добавили в выборку",
@@ -74,12 +75,13 @@ theme: /
     state: startSession
         intent!: /startSession
         script: 
-            var routingState = $request.rawRequest.payload.meta.current_app.state
+            $jsapi.log("startsession")
+            var routingState = $request.rawRequest.payload.meta.current_app.state.routingState
             if (routingState == "create") {
                 reply( {
                         "pronounceText": "Сессия была открыта: просканируйте QR-код для голосования на мобильных устройствах",
                         items: [ 
-                            formStartSessionCommand() 
+                            formOpenSessionCommand() 
                         ]
                     },
                     $response);
@@ -91,12 +93,13 @@ theme: /
     state: endSession
         intent!: /endSession
         script:
-            var routingState = $request.rawRequest.payload.meta.current_app.state
+            var routingState = $request.rawRequest.payload.meta.current_app.state.routingState
+            $jsapi.log("endSession")
             if (routingState == "session") {
                 reply( {
                         "pronounceText": "Хорошо, результаты голосования перед вами на экране",
                         items: [ 
-                            formCloseSessionCommand() 
+                            formEndSessionCommand() 
                         ]
                     },
                     $response);
@@ -104,20 +107,17 @@ theme: /
                 sendAnswer_Speech("Не получится, мы не на той странице");
             }
 
-    state: returnCreate
-        intent!: /returnCreate
+    state: help
+        intent!: /help
         script:
-            var routingState = $request.rawRequest.payload.meta.current_app.state
-            if (routingState != "create") {
-                reply( {
-                        "pronounceText": "Хорошо, вот главная страница",
-                        items: [ 
-                            formReturnCreateCommand() 
-                        ]
-                    },
-                    $response);
-            } else {
-                sendAnswer_Speech("Мы и так тут");
-            }
+            reply( {
+                "pronounceText": "Хорошо, вот список доступных команд",
+                items: [ 
+                    formHelpCommand() 
+                ]
+            },
+            $response);
+
+            
             
           

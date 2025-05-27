@@ -17,35 +17,9 @@
     "business" : false
   },
   "intents" : [ {
-    "id" : 903822,
-    "path" : "/addMovie",
-    "description" : "Добавить фильм в выборку",
-    "enabled" : true,
-    "businessShared" : false,
-    "business" : false,
-    "phrases" : [ {
-      "text" : "добавить @film"
-    }, {
-      "text" : "добавь @film"
-    }, {
-      "text" : "фильм @film"
-    }, {
-      "text" : "добавь фильм @film"
-    }, {
-      "text" : "добавь картину @film"
-    } ],
-    "patterns" : [ ],
-    "slots" : [ {
-      "name" : "film",
-      "entity" : "film",
-      "required" : true,
-      "prompts" : [ "Можете сказать какой именно фильм" ],
-      "array" : false,
-      "client" : false
-    } ]
-  }, {
     "id" : 910043,
     "path" : "/endSession",
+    "description" : "Закончить голосование",
     "enabled" : true,
     "businessShared" : false,
     "business" : false,
@@ -71,27 +45,23 @@
       "text" : "закончи сессию"
     }, {
       "text" : "закрой голосование"
+    }, {
+      "text" : "стоп голосование"
     } ],
     "patterns" : [ ]
   }, {
-    "id" : 906751,
-    "path" : "/returnCreate",
-    "description" : "Вернуться на главный экран",
+    "id" : 904347,
+    "path" : "/help",
+    "description" : "Получить помощь по доступным командам",
     "enabled" : true,
     "businessShared" : false,
     "business" : false,
     "phrases" : [ {
-      "text" : "Давай вернемся"
+      "text" : "Помощь"
     }, {
-      "text" : "вернись"
+      "text" : "Помоги"
     }, {
-      "text" : "назад"
-    }, {
-      "text" : "возвращаемся"
-    }, {
-      "text" : "возврат"
-    }, {
-      "text" : "главный экран"
+      "text" : "Какие команды доступны"
     } ],
     "patterns" : [ ]
   }, {
@@ -115,10 +85,6 @@
       "text" : "начинаем"
     }, {
       "text" : "стартанем"
-    }, {
-      "text" : "открой голосование"
-    }, {
-      "text" : "голосование"
     }, {
       "text" : "старт"
     }, {
@@ -144,7 +110,7 @@
       "phoneticSearch" : false,
       "fuzzySearch" : false,
       "client" : false,
-      "subject" : ""
+      "subject" : "Название фильма"
     },
     "records" : [ {
       "id" : 26340761,
