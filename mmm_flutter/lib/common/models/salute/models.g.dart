@@ -55,9 +55,13 @@ Map<String, dynamic> _$CloseSessionCommandToJson(
         CloseSessionCommand instance) =>
     <String, dynamic>{};
 
-ReturnCreateCommand _$ReturnCreateCommandFromJson(Map<String, dynamic> json) =>
-    ReturnCreateCommand();
+HelpCommand _$HelpCommandFromJson(Map<String, dynamic> json) => HelpCommand();
 
-Map<String, dynamic> _$ReturnCreateCommandToJson(
-        ReturnCreateCommand instance) =>
+Map<String, dynamic> _$HelpCommandToJson(HelpCommand instance) =>
+    <String, dynamic>{};
+
+ReturnCreate _$ReturnCreateFromJson(Map<String, dynamic> json) =>
+    ReturnCreate();
+
+Map<String, dynamic> _$ReturnCreateToJson(ReturnCreate instance) =>
     <String, dynamic>{};

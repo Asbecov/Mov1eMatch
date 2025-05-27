@@ -83,10 +83,8 @@ class SaluteNavigationBloc
             );
           }
         }
-      case ReturnCreateCommand _:
-        if (routerState.name == resultsName) {
-          context.goNamed(createName);
-        }
+      case ReturnCreate _:
+        context.goNamed(createName);
     }
   }
 }

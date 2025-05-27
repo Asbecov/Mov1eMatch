@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -10,13 +11,74 @@ import 'package:go_router/go_router.dart';
 import 'package:movie_match/common/constants/app_constants.dart';
 import 'package:movie_match/common/constants/assets.dart';
 import 'package:movie_match/common/constants/routing_constants.dart';
+import 'package:movie_match/common/models/salute/models.dart';
 import 'package:movie_match/common/widgets/selectable_button.dart';
+import 'package:movie_match/common/widgets/selectable_text_button.dart';
 import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
 import 'package:movie_match/features/results/widgets/results_card.dart';
 import 'package:mmm_client/mmm_client.dart';
+import 'package:movie_match/main.dart';
 
-class ResultsView extends StatelessWidget {
+class ResultsView extends StatefulWidget {
   const ResultsView({super.key});
+
+  @override
+  State<ResultsView> createState() => _ResultsViewState();
+}
+
+class _ResultsViewState extends State<ResultsView> {
+  StreamSubscription<String>? _streamSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _streamSubscription =
+        saluteHandler?.eventStream.listen((data) => _streamListener(
+              context.mounted ? context : null,
+              data,
+            ));
+  }
+
+  @override
+  void dispose() {
+    _streamSubscription?.cancel();
+
+    super.dispose();
+  }
+
+  void _streamListener(BuildContext? context, String data) {
+    try {
+      final BaseCommand command = BaseCommand.fromJson(jsonDecode(data));
+
+      if (command is HelpCommand && context != null) {
+        showDialog(
+          context: context,
+          useRootNavigator: false,
+          builder: (context) => AlertDialog.adaptive(
+            // icon: Icon(Icons.question_mark),
+            title: Text("Список доступных комманд:"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text("На данной странице нету доступных команд. :("),
+              ],
+            ),
+            actions: <Widget>[
+              SelectableTextButton(
+                icon: Icons.clear,
+                label: "Закрыть",
+                onTap: () => context.pop(),
+              )
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      if (kDebugMode) print("error : $e");
+    }
+  }
 
   void _listener(BuildContext context, ResultsState state) {
     if (state is ResultsErrorState && state.error is NotFoundException) {

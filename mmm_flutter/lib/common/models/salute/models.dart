@@ -45,8 +45,10 @@ abstract class BaseCommand {
         return StartSessionCommand.fromJson(json);
       case 'end_session':
         return CloseSessionCommand.fromJson(json);
-      case 'return_to_create':
-        return ReturnCreateCommand.fromJson(json);
+      case 'return_create':
+        return ReturnCreate.fromJson(json);
+      case 'help':
+        return HelpCommand.fromJson(json);
       default:
         throw Exception('Unknown command type: ${json['command']}');
     }
@@ -83,10 +85,19 @@ class CloseSessionCommand implements BaseCommand {
 }
 
 @JsonSerializable()
-class ReturnCreateCommand implements BaseCommand {
-  ReturnCreateCommand();
+class HelpCommand implements BaseCommand {
+  HelpCommand();
 
-  factory ReturnCreateCommand.fromJson(Map<String, dynamic> json) =>
-      _$ReturnCreateCommandFromJson(json);
-  Map<String, dynamic> toJson() => _$ReturnCreateCommandToJson(this);
+  factory HelpCommand.fromJson(Map<String, dynamic> json) =>
+      _$HelpCommandFromJson(json);
+  Map<String, dynamic> toJson() => _$HelpCommandToJson(this);
+}
+
+@JsonSerializable()
+class ReturnCreate implements BaseCommand {
+  ReturnCreate();
+
+  factory ReturnCreate.fromJson(Map<String, dynamic> json) =>
+      _$ReturnCreateFromJson(json);
+  Map<String, dynamic> toJson() => _$ReturnCreateToJson(this);
 }

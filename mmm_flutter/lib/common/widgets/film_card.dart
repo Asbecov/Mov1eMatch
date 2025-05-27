@@ -93,39 +93,37 @@ class _FilmCardState extends State<FilmCard> {
                   ),
                 ),
                 if (_shouldShowCross) Icon(Icons.close),
-                if (!_shouldShowCross)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: <Color>[
-                            Colors.transparent,
-                            Colors.black,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color:
-                              Theme.of(context).colorScheme.secondaryContainer,
-                          borderRadius: BorderRadius.circular(borderRadius),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5.0,
-                          horizontal: 10.0,
-                        ),
-                        child: Text(
-                          widget.label,
-                          overflow: TextOverflow.fade,
-                        ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: <Color>[
+                          Colors.transparent,
+                          Colors.black,
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
                       ),
                     ),
-                  )
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        borderRadius: BorderRadius.circular(borderRadius),
+                      ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 5.0,
+                        horizontal: 10.0,
+                      ),
+                      child: Text(
+                        widget.label,
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                  ),
+                )
               ],
             ),
           ),
