@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movie_match/common/constants/app_constants.dart';
 import 'package:movie_match/common/constants/assets.dart';
 
@@ -116,10 +119,18 @@ class _SearchModalSheetState extends State<SearchModalSheet> {
                     top: index == 1,
                     bottom: index == state.results.length,
                     key: ValueKey(index - 1),
-                    onTap: (key) =>
-                        context.read<CreateBloc>().add(AddEntryEvent(
-                              entry: state.results[(key as ValueKey).value],
-                            )),
+                    onTap: (key) {
+                      final Film film = state.results[(key as ValueKey).value];
+                      Fluttertoast.showToast(
+                        msg: "Фильм \"${film.title}\" добавлен в голосование",
+                        timeInSecForIosWeb: 2,
+                        toastLength: Toast.LENGTH_LONG,
+                      );
+                      Timer(Duration(seconds: 2), () => Fluttertoast.cancel());
+                      context
+                          .read<CreateBloc>()
+                          .add(AddEntryEvent(entry: film));
+                    },
                     title: state.results[index - 1].title,
                     description: state.results[index - 1].description ?? '',
                     genres: state.results[index - 1].genres,

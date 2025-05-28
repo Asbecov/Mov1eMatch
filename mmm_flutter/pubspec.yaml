@@ -3,7 +3,7 @@ description: "Pick your favourite movies for the evening"
 
 publish_to: "none"
 
-version: 1.0.0+10
+version: 1.0.0+11
 
 platforms:
   web:
@@ -36,6 +36,7 @@ dependencies:
   flutter_card_swiper: ^7.0.2
   flutter_confetti: ^0.5.1
   flutter_native_splash: ^2.4.6
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:

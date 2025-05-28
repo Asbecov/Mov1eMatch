@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'package:movie_match/common/constants/routing_constants.dart';
 import 'package:movie_match/common/models/salute/models.dart';
 import 'package:movie_match/common/navigation/salute/bloc/bloc.dart';
+import 'package:movie_match/common/widgets/exit_notifier.dart';
 import 'package:movie_match/features/create/views/create_view.dart';
 import 'package:movie_match/features/results/domain/results_bloc/bloc.dart';
 import 'package:movie_match/features/results/views/results_view.dart';
@@ -56,7 +57,7 @@ final GoRouter router = GoRouter(
         },
         child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
           listener: SaluteNavigationBloc.blocListener,
-          child: const CreateView(),
+          child: const ExitNotifier(child: CreateView()),
         ),
       ),
     ),
@@ -84,7 +85,7 @@ final GoRouter router = GoRouter(
         ],
         child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
           listener: SaluteNavigationBloc.blocListener,
-          child: const SessionView(),
+          child: const ExitNotifier(child: SessionView()),
         ),
       ),
     ),
@@ -107,7 +108,7 @@ final GoRouter router = GoRouter(
         ],
         child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
           listener: SaluteNavigationBloc.blocListener,
-          child: const ResultsView(),
+          child: const ExitNotifier(child: ResultsView()),
         ),
       ),
     ),
@@ -130,7 +131,7 @@ final GoRouter router = GoRouter(
         ],
         child: BlocListener<SaluteNavigationBloc, SaluteNavigationState>(
           listener: SaluteNavigationBloc.blocListener,
-          child: const VotingView(),
+          child: const ExitNotifier(child: VotingView()),
         ),
       ),
     ),

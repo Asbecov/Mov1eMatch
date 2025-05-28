@@ -137,8 +137,8 @@ class _SearchCardState extends State<SearchSelectableCard> {
                                   child: Text(
                                     widget.description,
                                     softWrap: true,
-                                    maxLines: null,
-                                    overflow: TextOverflow.fade,
+                                    maxLines: 8,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
