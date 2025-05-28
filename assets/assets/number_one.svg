@@ -1,0 +1,26 @@
+<svg width="280" height="196" viewBox="0 0 280 196" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="gradient_active" x1="0.8" x2="0" y1="1.2" y2="0">
+      <stop offset="-1.21%" stop-color="#858CF0"/>
+      <stop offset="6.32%" stop-color="#75C3F0"/>
+      <stop offset="11.63%" stop-color="#6EDBF0"/>
+      <stop offset="18.09%" stop-color="#7BACF0"/>
+      <stop offset="24.2%" stop-color="#848CF0"/>
+      <stop offset="33.17%" stop-color="#C28DF8"/>
+      <stop offset="39.59%" stop-color="#BAA5BE"/>
+      <stop offset="46.58%" stop-color="#C6BAC9"/>
+      <stop offset="54.28%" stop-color="#EBE7EC"/>
+      <stop offset="60.78%" stop-color="#FFFFFF"/>
+      <stop offset="66.37%" stop-color="#EAEAEA"/>
+      <stop offset="75.3%" stop-color="#BDB8BA"/>
+      <stop offset="79.29%" stop-color="#B9B2B5"/>
+      <stop offset="90.2%" stop-color="#F2DFF2"/>
+      <stop offset="95.95%" stop-color="#E6D6E4"/>
+      <stop offset="101.78%" stop-color="#D0C4C8"/>
+    </linearGradient>
+  </defs>
+  <path
+    d="M126.146,48L163.35,48L128.011,148L41.7966,148L32,176L239.406,176L248.98,148L157.708,148L202.941,20L126.146,20L126.146,48Z"
+    fill="url(#gradient_active)"
+  />
+</svg>
